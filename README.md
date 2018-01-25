@@ -1,4 +1,4 @@
-Reveal.js Template
+Reveal.js Webpack build setup template
 ==================
 
 Reveal.js webpack-based build system:
