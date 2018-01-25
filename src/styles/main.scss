@@ -1,0 +1,14 @@
+// Reveal js style
+@import "../../node_modules/reveal.js/css/reveal.scss";
+
+// custom style
+@import "./gc-reveal.scss";
+
+
+.reveal .slides section .fragment.highlight-red-gc {
+  opacity: 1;
+  visibility: inherit; }
+
+.reveal .slides section .fragment.highlight-red-gc.visible {
+  color: #d9534f;
+}
