@@ -14,7 +14,7 @@ Come with lots of Reveal.js goodies:
 * [Reveal.js-menu](https://github.com/denehyg/reveal.js-menu) to have a very handy slideout menu and quickly jump to any slide by title
 * [Font Awesome 5](https://fontawesome.com) to fully enjoy the brand new SVG-based framework
 * [Mathjax](https://www.mathjax.org) for beautiful math in all browsers
-* Modified Reveal.js [Math.js](https://www.mathjax.org) file to allow more fragment kungfu moves in your Mathjax equations
+* Modified Reveal.js [Math.js](https://github.com/gcalmettes/revealjs-webpack-sauce/blob/master/src/scripts/math-gc.js) file to allow more fragment kungfu moves in your Mathjax equations
 
 Motivation?
 ----
