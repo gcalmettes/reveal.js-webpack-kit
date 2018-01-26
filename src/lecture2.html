@@ -106,8 +106,6 @@
             <p class="sided border-success">.border-success</p>
           </div>
         </div>
-        
-        
       </section>
       
       
@@ -197,6 +195,72 @@
           </p>
         </div>
       </section>
+
+      <section>
+        <h2>Fragments order</h2>
+        <p class="left small">
+          Control fragment order by using <span class="warning">data-index</span>, a variation around <span class="warning">data-fragment-index</span> that takes existing unindexed fragments into account.
+        </p>
+        <pre><code class="html normal" data-trim>
+          <span class="fragment" data-index=2>2 </span>
+          <span class="fragment">1</span>
+          <span class="fragment" data-index=4>4</span>
+          <span class="fragment">3</span>
+          <span class="fragment" data-index=4>4</span>
+          <span class="fragment" data-index=5>5</span>
+        </code></pre>
+          <p>Example: 
+            <span class="fragment" data-index=2>2</span>
+            <span class="fragment">1</span>
+            <span class="fragment" data-index=4>4</span>
+            <span class="fragment">3</span>
+            <span class="fragment" data-index=4>4</span>
+            <span class="fragment" data-index=5>5</span>
+            
+            <p class="fragment" data-delay=1 data-animate="fadeIn" data-index=5>
+              Items 1 and 3 are not indexed, but correctly ordered!
+            </p>
+          </p>
+        </section>
+
+        <section>
+  <pre><code data-trim data-noescape>
+(def lazy-fib
+  (concat
+   [0 1]
+   <mark>((fn rfib [a b]</mark>
+        (lazy-cons (+ a b) (rfib b (+ a b)))) 0 1)))
+  </code></pre>
+</section>
+
+ <section>
+    <h3>Highlight (javascript)</h3>
+    <pre class="javascript"><code>
+    
+     genNodeName: (function() {
+                      var count = 0;
+                      return (function() {
+                                  count++;
+                                  var newName = "NODE" + count;
+                                  return newName;
+                              });
+                  })()
+    
+</code></pre>
+    </section>
+    <section>
+    <h3>Highlight (bash)</h3>
+    <pre class="bash"><code>
+    
+$ echo "Hello, world!"
+$ if [ -e README ]; then
+> echo 'README exists.'
+> else
+> echo "README doesn't exist."
+> fi
+    
+</code></pre>
+    </section>
       
 
     </div>

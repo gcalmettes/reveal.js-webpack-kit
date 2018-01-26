@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       // Cross-browser shim that fully implements classList
       { src: dependencyPath + 'classList.js', condition: function() { return !document.body.classList; } },
       // Syntax highlight for <code> elements
-      // { src: dependencyPath + 'highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: dependencyPath + 'highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
       // Speaker notes
       { src: dependencyPath + 'notes.js', async: true },
       { src: dependencyPath + 'menu.js' },

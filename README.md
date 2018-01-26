@@ -15,6 +15,8 @@ Come with lots of Reveal.js goodies:
 * [Font Awesome 5](https://fontawesome.com) to fully enjoy the brand new SVG-based framework
 * [Mathjax](https://www.mathjax.org) for beautiful math in all browsers
 * Modified Reveal.js [Math.js](https://github.com/gcalmettes/revealjs-webpack-sauce/blob/master/src/scripts/math-gc.js) file to allow more fragment kungfu moves in your Mathjax equations
+* Full support of [Animate.css](https://github.com/daneden/animate.css) animations as well as any combinations of custom css styling (thanks to [Alexandre Decan code](https://github.com/hakimel/reveal.js/issues/833#issuecomment-272697592))
+
 
 Motivation?
 ----

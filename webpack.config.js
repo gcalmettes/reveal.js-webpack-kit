@@ -65,7 +65,7 @@ pluginsArray.push(
   new CopyWebpackPlugin([
     // Reveal.js dependencies and css print
     { from: nodePath + 'reveal.js/lib/js/classList.js', to: 'js/reveal.js-dependencies/classList.js' },
-    // { from: nodePath + 'reveal.js/plugin/highlight/highlight.js', to: 'js/reveal.js-dependencies/highlight.js' },
+    { from: nodePath + 'reveal.js/plugin/highlight/highlight.js', to: 'js/reveal.js-dependencies/highlight.js' },
     { context: nodePath + 'reveal.js/plugin/notes',
       from: '**/*',
       to: 'js/reveal.js-dependencies/'
