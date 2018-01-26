@@ -1,8 +1,6 @@
 //==========================================
 //======== MODIFICATION OF REVEAL MATHS.JS PLUGIN TO HAVE FRAGMENTS IN MATHJAX
 //==========================================
-import Reveal from 'reveal.js/js/reveal.js'
-
 
 const RevealMath = window.RevealMath || (function(){
 

@@ -4,6 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 
 ////////////////////////
 // Helper functions
@@ -35,9 +37,9 @@ function getAllHTMLPlugins (htmlFiles) {
   })
 }
 
-//////////////////////////
+////////////////////////////////////////
 // PLUGINS ARRAY to be fed into webpack
-/////////////////////////
+////////////////////////////////////////
 
 // 1- Add of all the HTMLplugin instances
 let pluginsArray = getAllHTMLPlugins(getEntries('./src/'))
@@ -51,57 +53,52 @@ pluginsArray.push(
     'reveal.js/lib/font/source-sans-pro/source-sans-pro.css')
   )
 
-// 3- Add JQuery for custom animations to work in Reveal (reveal-animate-css.js)
+// 3- Those library will be directly available on the global scope
+// (JQuery needed for custom animations to work in Reveal (reveal-animate-css.js))
 pluginsArray.push(
   new webpack.ProvidePlugin({
     $: 'jquery',
     jQuery: 'jquery'
-})
-  )
+  })
+)
+pluginsArray.push(
+  new webpack.ProvidePlugin({
+    Reveal: 'reveal.js'
+  })
+)
 
-// 4- Copy needed files in hierarchy
+// 4- Copy some needed files in hierarchy
 const nodePath = '../node_modules/';
 pluginsArray.push(
   new CopyWebpackPlugin([
-    // Reveal.js dependencies and css print
-    { from: nodePath + 'reveal.js/lib/js/classList.js', to: 'js/reveal.js-dependencies/classList.js' },
-    { from: nodePath + 'reveal.js/plugin/highlight/highlight.js', to: 'js/reveal.js-dependencies/highlight.js' },
-    { context: nodePath + 'reveal.js/plugin/notes',
-      from: '**/*',
-      to: 'js/reveal.js-dependencies/'
-    },
+    // speaker note base window
+    { from: nodePath + 'reveal.js/plugin/notes/notes.html', to: 'js/reveal.js-dependencies/notes.html' },
+    // styles for slides export to to pdf
     { from: { glob: nodePath + 'reveal.js/css/print/*.css' }, to: 'css/[name].css' },
-    // reveal.js-menu
-    { from: { glob: nodePath + 'reveal.js-menu/menu.*' }, to: 'js/reveal.js-dependencies/menu.[ext]' },
-    // reveald3
-    { from: nodePath + 'reveald3/reveald3.js', to: 'js/reveal.js-dependencies/reveald3.js' },
-    // external.js
-    { from: nodePath + 'reveal_external/external/external.js', to: 'js/reveal.js-dependencies/external.js' },
-    // // mathjax
-    // { from: nodePath + 'mathjax/MathJax.js', to: 'js/reveal.js-dependencies/MathJax.js' },
-    // { from: nodePath + 'mathjax/config/TeX-AMS_HTML-full.js', to: 'js/reveal.js-dependencies/config/TeX-AMS_HTML-full.js' },
-    // {
-    //   context: nodePath + 'mathjax/extensions',
-    //   from: '**/*',
-    //   to: 'js/reveal.js-dependencies/extensions'
-    // },
+    // modified styles for menu.js plugin (compatible with inline svg)
+    { from: 'styles/menu-inline-svg.css', to: 'css/menu.css' },
     // any files in content
     { context: 'content',
       from: '**/*',
       to: 'content/'
-    },
-
+    }
   ])
 )
 
-// 4- Extract styles (scss + css) in specific css file
+// 4- Generate styles file from (scss + css)
 pluginsArray.push(
   new ExtractTextPlugin({filename:'css/presentation.bundle.css'}),
 )
 
+// 5- When ready for production
+// pluginsArray.push(
+//   new UglifyJsPlugin()
+// )
+
 //////////////////////////
 // WEBPACK CONFIG ITSELF
 /////////////////////////
+
 module.exports = {
   context: path.join(__dirname, 'src'),
   entry: {
@@ -111,9 +108,9 @@ module.exports = {
     path: path.join(__dirname, 'build'),
     filename: 'js/presentation.bundle.js'
   },
-  externals: {
-    'reveal': {root: 'Reveal'}
-  },
+  // externals: {
+  //   'reveal': {root: 'Reveal'}
+  // },
   module: {
     rules:[
       { test:/\.(s*)css$/,

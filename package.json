@@ -21,6 +21,7 @@
     "path": "^0.12.7",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
   },
@@ -30,6 +31,7 @@
     "@fortawesome/fontawesome-free-regular": "^5.0.4",
     "@fortawesome/fontawesome-free-solid": "^5.0.4",
     "animate.css": "^3.5.2",
+    "highlight.js": "^9.12.0",
     "jquery": "^3.3.1",
     "mathjax": "^2.7.2",
     "reveal.js": "^3.6.0",
