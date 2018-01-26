@@ -97,12 +97,12 @@ $alignList: left, right, center, justify;
 /////////////////////
 // STYLES
 
-.strong { font-weight: bold; }
-.em { font-style: italic; }
+.strong { font-weight: bold !important;}
+.em { font-style: italic !important; }
 .u { text-decoration: underline; }
 .strike { text-decoration: line-through; }
-.tt { font-family: monospace; }
-.sf { font-family: sans-serif; }
+.tt { font-family: monospace !important; }
+.sf { font-family: sans-serif !important; }
 
 section {
 	& .framed,
@@ -214,7 +214,7 @@ $angle: 5;
 /* Layout */
 
 .reveal .row {
-  margin: 0.15em 0em; }
+  margin: 0.1em 0em; }
 
 .reveal .row:before,
 .reveal .row:after {
@@ -257,7 +257,6 @@ $angle: 5;
     margin-top: $i * -1% !important;
   }
 }
-
 .push-left { 
 	float: left;
 	display: inline-block; 
@@ -269,6 +268,27 @@ $angle: 5;
 .clearfix {
 	clear:both; 
 }
+
+/* Any element translation */
+@for $i from 1 through 100 {
+  // to up
+  .up-#{$i} {
+    margin-top: $i * -1% !important;
+  }
+  // to down
+  .down-#{$i} {
+    margin-top: $i * 1% !important;
+  }
+  // to left
+  .left-#{$i} {
+    margin-left: $i * -1% !important;
+  }
+  // to right
+  .right-#{$i} {
+    margin-left: $i * 1% !important;
+  }
+}
+
 
 
 .no-margin {

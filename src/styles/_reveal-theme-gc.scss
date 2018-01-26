@@ -62,7 +62,7 @@ body {
 .reveal p,
 .reveal div p {
   margin: $blockMargin 0;
-	line-height: 1.3;
+	line-height: 1.1;
 	text-align: left;
   font-size: $small; }
 
@@ -71,7 +71,8 @@ body {
 .reveal video,
 .reveal iframe {
   max-width: 95%;
-  max-height: 95%; }
+  max-height: 95%; 
+	padding: 0 !important;}
 
 .reveal strong,
 .reveal b {
@@ -145,7 +146,7 @@ $list-style-type: (
 .reveal pre {
 	display: block;
 	position: relative;
-	width: 90%;
+	width: 95%;
 	margin: $blockMargin auto;
 
 	text-align: left;

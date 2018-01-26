@@ -135,7 +135,7 @@ module.exports = {
       }
     ]
   },
-  watch:true,
+  // watch:true,
   devServer: {
     contentBase: path.join(__dirname, "build/"),
     port: 9000

@@ -6,52 +6,112 @@
 </head>
 <body>
   
-  <div class="reveal">
-    <div class="slides">
-
-      <section >
-        <h1>Title</h1>
-        <div>
-          test
-        </div>
-
-      </section>
-
-      <section>
-        <h3>Some classes...</h3>
-        <p class="center">
-          ... to complement <a href="https://github.com/hakimel/reveal.js">RevealJS</a>'s ones.
-        </p>
-        
-        <div class="row">
-          <div class="col-33">
-            <span class="smallest">.smallest</span><br />
-            <span class="smaller">.smaller</span><br />
-            <span class="small">.small</span><br />
-            <span class="big">.big</span><br />
-            <span class="bigger">.bigger</span><br />
-            <span class="biggest">.biggest</span><br />
-          </div>
-          <div class="col-33">
-            <span class="muted">.muted</span><br />
-            <span class="info">.info</span><br />
-            <span class="warning">.warning</span><br />
-            <span class="danger">.danger</span><br />
-            <span class="success">.success</span><br />
-            <span class="pop">.pop</span><br />
-          </div>
-          <div class="col-33">
-            <span class="strong">.strong</span><br />
-            <span class="em">.em</span><br />
-            <span class="u">.u</span><br />
-            <span class="strike">.strike</span><br />
-            <span class="tt">.tt</span><br />
-            <span class="sf">.sf</span><br />
-          </div>
-        </div>
-        <span class="smaller">There are also .persistent, .hidden and .removed...</span>
-      </section>
+<div class="reveal">
+<div class="slides">
       
+<section class="title-slide">
+  <h1>Reveal.js + Webpack</h1>
+</section>
+
+<section data-external="content/slide-external-ex.html"> </section>
+
+<section>
+  <h2>Font Awesome 5</h2>
+  <div>
+    <i class="fas fa-arrow-circle-right"></i> SVG with JavaScript framework
+  </div>
+  <div class="framed drop-5">
+  <p>
+    Oh hello masking!
+  </p>
+  <div class="row" style="font-size: 3em;">
+    <i class="fas fa-pencil-alt" data-fa-transform="shrink-10 up-.5" data-fa-mask="fas fa-comment"></i>
+    <i class="fab fa-facebook-f" data-fa-transform="shrink-3.5 down-1.6 right-1.25" data-fa-mask="fas fa-circle"></i>
+    <i class="fas fa-headphones" data-fa-transform="shrink-6" data-fa-mask="fas fa-square"></i>
+  </div>  
+  
+  <p>
+    Oh hello layering!
+  </p>
+  <div class="row" style="font-size: 2em;">
+  <span class="fa-layers fa-fw">
+    <i class="fas fa-circle" style="color:Tomato"></i>
+    <i class="fa-inverse fas fa-times" data-fa-transform="shrink-6"></i>
+  </span>
+
+  <span class="fa-layers fa-fw">
+    <i class="fas fa-bookmark"></i>
+    <i class="fa-inverse fas fa-heart" data-fa-transform="shrink-10 up-2" style="color:Tomato"></i>
+  </span>
+
+  <span class="fa-layers fa-fw">
+    <i class="fas fa-play" data-fa-transform="rotate--90 grow-2"></i>
+    <i class="fas fa-sun fa-inverse" data-fa-transform="shrink-10 up-2"></i>
+    <i class="fas fa-moon fa-inverse info" data-fa-transform="shrink-11 down-4.2 left-4"></i>
+    <i class="fas fa-star fa-inverse" data-fa-transform="shrink-11 down-4.2 right-4"></i>
+  </span>
+
+  <span class="fa-layers fa-fw">
+    <i class="fas fa-calendar success"></i>
+    <span class="fa-layers-text fa-inverse" data-fa-transform="shrink-8 down-3" style="font-weight:900">27</span>
+  </span>
+
+  <span class="fa-layers fa-fw"">
+    <i class="fas fa-certificate"></i>
+    <span class="fa-layers-text fa-inverse pop" data-fa-transform="shrink-11.5 rotate--30" style="font-weight:900">NEW</span>
+  </span>
+
+  <span class="fa-layers fa-fw">
+    <i class="fas fa-envelope"></i>
+    <span class="fa-layers-counter" style="background:Tomato">1,419</span>
+  </span>
+</div>
+</div>
+</section>
+
+<section>
+  <h2>More Mathjax goodies   </h2>
+  $s=\sqrt{\fragindex{0}{\fraglight{highlight-red-gc}{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}}}$
+   <!--  <p class="fragment" data-fragment-index=1 style="font-size: 1.2em; text-align:center;">Variance</p> -->
+</section>
+      
+
+<section >
+  <h2>Some added classes ...</h2>
+  <div class="row">
+    <div class="col-33">
+      <p class="smallest">.smallest</p>
+      <p class="smaller">.smaller</p>
+      <p class="small">.small</p>
+      <p class="normal">.normal</p>
+      <p class="big">.big</p>
+      <p class="bigger">.bigger</p>
+      <p class="biggest">.biggest</p>
+    </div>
+    <div class="col-33">
+      <p class="normal muted">.muted</p>
+      <p class="normal info">.info</p>
+      <p class="normal warning">.warning</p>
+      <p class="normal danger">.danger</p>
+      <p class="normal success">.success</p>
+      <p class="normal pop">.pop</p>
+    </div>
+    <div class="col-33">
+      <p class="normal strong">.strong</p>
+      <p class="normal em">.em</p>
+      <p class="normal u">.u</p>
+      <p class="normal strike">.strike</p>
+      <p class="normal tt">.tt</p>
+      <p class="normal sf">.sf</p>
+    </div>
+  </div>
+  <div class="smaller center">
+    There are also .persistent, .hidden and .removed..
+  </div>
+</section>
+
+
+
       
       <section>
         <h3>Blocks, backgrounds and borders</h3>
@@ -263,11 +323,7 @@ $ if [ -e README ]; then
     </section>
       
 
-    </div>
-  </div>
-
-  <!-- <script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
-  <script src="../node_modules/reveal.js/js/reveal.js"></script> -->
-
+</div> <!-- slides -->
+</div> <!-- reveal -->
 </body>
 </html>
