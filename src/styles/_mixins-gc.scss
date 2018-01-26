@@ -1,0 +1,5 @@
+@mixin alert-text($color) {
+	background-color: $color;
+	color: white; 
+	font-variant: small-caps;
+}

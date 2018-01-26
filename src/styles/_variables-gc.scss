@@ -1,0 +1,61 @@
+
+// COLORS
+
+$backgroundColor: #fcf8e3;//#EEF0E8;
+$mainColor: #222;
+$headingColor: #222;
+
+
+$linkColor: #2a76dd;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$muted: #B4B4B4;
+$info: #77ABDA;
+$warning: #FBC15E;
+$danger: #F3635F;
+$success: #5AAA82;
+$pop: #F267F1;
+
+// FONTS
+
+$mainFont: 	  'Raleway', sans-serif; //'Source Sans Pro', Helvetica, sans-serif;
+$headingFont: 'Raleway', sans-serif; //'Source Sans Pro', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: none;
+$headingFontWeight: 500;
+$headingPaddingBottom: 0.4em;
+
+$blockMargin: 10px; // Vertical spacing between blocks of text
+$headingMargin: 0 0 $blockMargin 0;
+
+// SIZES
+
+$mainFontSize: 2.5em;
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+$smallest: 0.5em;
+$smaller: 0.6em;
+$small: 0.7em;
+$normal: 0.9em;
+$big: 1.1em;
+$bigger: 1.25em;
+$biggest: 1.5em;
+
+
+// BORDERS
+
+$borderColor: black;
+$borderThickness: 2px;
+$borderSidedThickness: 10px;
+
+// OTHERS
+
+
+
+

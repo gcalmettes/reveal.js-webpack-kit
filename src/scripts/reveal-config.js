@@ -7,8 +7,12 @@ import Reveal from 'reveal.js/js/reveal.js'
 
 // Modified Math.js to integrate special fragments capabilities in latex equations
 import RevealMath from './math-gc.js'
+// Include animate.css animations
+import RevealAnimate from './reveal-animate-css.js'
 // print slides as pdf if ?print-pdf is appended to the URL
 import loadPrintCSS  from './print-css'
+
+import './print-css'
 
 ///////////////////////////
 // initialization

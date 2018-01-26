@@ -1,14 +1,21 @@
-// Reveal js style
+// Global Reveal js style
 @import "../../node_modules/reveal.js/css/reveal.scss";
 
-// custom style
-@import "./gc-reveal.scss";
+// custom theme style
+@import "./_reveal-theme-gc.scss";
+
+// custom features
+@import "./_reveal-features-gc.scss";
+
+// animate.css
+@import "../../node_modules/animate.css/animate.min.css";
 
 
-.reveal .slides section .fragment.highlight-red-gc {
-  opacity: 1;
-  visibility: inherit; }
 
-.reveal .slides section .fragment.highlight-red-gc.visible {
-  color: #d9534f;
-}
+// .reveal .slides section .fragment.highlight-red-gc {
+//   opacity: 1;
+//   visibility: inherit; }
+
+// .reveal .slides section .fragment.highlight-red-gc.visible {
+//   color: #d9534f;
+// }

@@ -15,6 +15,9 @@ import regular from './../../node_modules/@fortawesome/fontawesome-free-regular'
 import brands from './../../node_modules/@fortawesome/fontawesome-free-brands';
 fontawesome.library.add(solid, regular, brands)
 
+// allow search pseudo elements in CSS (e.g. :after )
+fontawesome.config['searchPseudoElements'] = true
+
 // // If Mathjax referenced locally
 // import './../../node_modules/mathjax/MathJax.js'
 

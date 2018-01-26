@@ -51,7 +51,15 @@ pluginsArray.push(
     'reveal.js/lib/font/source-sans-pro/source-sans-pro.css')
   )
 
-// 3- Copy needed files in hierarchy
+// 3- Add JQuery for custom animations to work in Reveal (reveal-animate-css.js)
+pluginsArray.push(
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery'
+})
+  )
+
+// 4- Copy needed files in hierarchy
 const nodePath = '../node_modules/';
 pluginsArray.push(
   new CopyWebpackPlugin([
@@ -127,7 +135,7 @@ module.exports = {
       }
     ]
   },
-  // watch:true,
+  watch:true,
   devServer: {
     contentBase: path.join(__dirname, "build/"),
     port: 9000

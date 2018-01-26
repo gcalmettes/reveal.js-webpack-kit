@@ -1,0 +1,284 @@
+
+/*********************************************
+ * GENERAL
+ *********************************************/
+
+// Common lists
+$colorsList: (
+	muted: $muted,
+	info: $info,
+	warning: $warning,
+	danger: $danger,
+	success: $success,
+	pop: $pop
+);
+
+.persistent {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.hidden {
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+.removed {
+  display: none !important;
+}
+
+// Use <bspan>, .bspan or .inline-block to get an inline block!
+section bspan,
+section .bspan,
+section .inline-block {
+  display: inline-block !important;
+}
+
+/*********************************************
+ * BACKGROUND
+ *********************************************/
+
+@for $i from 1 through 9 {
+	html.alpha-0#{$i} .slide-background {
+  	opacity: #{$i/10} !important;
+	}
+}
+
+/*********************************************
+* SPECIAL SLIDE CLASSES
+*********************************************/
+
+.title-slide {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+
+	&.fullwidth div{
+  	width: 100%;
+	}
+}
+
+
+/*********************************************
+* TEXT STYLING
+*********************************************/
+
+/////////////////////
+// Size
+
+$sizesList: (
+	smallest: $smallest,
+	smaller: $smaller,
+	small: $small,
+	normal: $normal,
+	big: $big,
+	bigger: $bigger,
+	biggest: $biggest
+);
+
+@each $name, $size in $sizesList {
+	.#{$name} {
+		font-size: $size !important;
+	}
+}
+
+/////////////////////
+// Alignment
+
+$alignList: left, right, center, justify;
+
+@each $pos in $alignList {
+	.#{$pos} {
+		text-align: $pos !important; 
+	}
+}
+
+/////////////////////
+// STYLES
+
+.strong { font-weight: bold; }
+.em { font-style: italic; }
+.u { text-decoration: underline; }
+.strike { text-decoration: line-through; }
+.tt { font-family: monospace; }
+.sf { font-family: sans-serif; }
+
+section {
+	& .framed,
+		.boxed {
+  border: $borderThickness solid lighten($borderColor, 50%);
+  padding-left: 10px;
+  padding-right: 10px;
+	}
+	& .framed {
+		  border-radius: 10px;
+	}
+	& .padded,
+	  .sided,
+	  .quoted {
+  		padding: 3px 10px 3px 10px;
+	}
+	& .sided {
+		  border-left: $borderSidedThickness solid lighten($borderColor, 50%);
+  		background-color: lighten($borderColor, 80%);
+	}
+	& .quoted {
+  		background-color: lighten($borderColor, 80%);
+  		font-style: italic;
+  		&:before {
+  			display: none;
+  			content: "\f10d";
+  			font-family: "Font Awesome 5 Solid";
+			}
+			&:after {
+				display: none;
+  			position: relative;
+  			top: 0.3em;
+  			content: "\f10e";
+  			font-family: 'Font Awesome 5 Solid';
+  			padding-left: 0.2em;
+			}
+	}
+}
+
+// hack to style Font Awesome in quoted element
+.quoted svg[data-fa-pseudo-element=':before'] {
+	position: relative;
+  top: -0.5em;
+	color: lighten($borderColor, 50%);
+	padding-right: 0.3em;
+	font-style: 4em;
+}
+.quoted svg[data-fa-pseudo-element=':after'] {
+	position: relative;
+  top: 0.3em;
+	color: lighten($borderColor, 50%);
+	padding-left: 0.2em;
+}
+
+
+
+/////////////////////
+// COLOR Related
+
+@each $name, $color in $colorsList {
+	// colors
+	.#{$name} {
+		color: $color;
+	}
+	// underline
+	.u-#{$name} {
+		text-decoration: underline;
+  	text-decoration-color: $color;
+  	-webkit-text-decoration-color: $color;
+	}
+	// line through
+	.strike-#{$name} {
+		text-decoration: line-through;
+  	text-decoration-color: $color;
+  	-webkit-text-decoration-color: $color;
+	}
+	// background
+	.bg-#{$name}-light {
+		background-color: lighten($color, 15%);
+		color: darken($color, 30%)
+	}
+	.bg-#{$name} {
+		background-color: $color;
+	}
+	// border
+	.border-#{$name} {
+		border-color: $color !important;
+	}
+}
+
+/*********************************************
+* Rotation
+*********************************************/
+
+$angle: 5;
+@while $angle <= 355 {
+  .rotation-#{$angle} {
+    -ms-transform: rotate($angle + deg); // IE 9
+    -webkit-transform: rotate($angle + deg); // Chrome, Safari, Opera
+    transform: rotate($angle + deg);
+  }
+  $angle: $angle + 5;
+}
+
+/*********************************************
+* CSS grid
+*********************************************/
+
+/* Layout */
+
+.reveal .row {
+  margin: 0.15em 0em; }
+
+.reveal .row:before,
+.reveal .row:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+.reveal .row *[class*='col-'] {
+  box-sizing: border-box;
+  position: relative;
+  left: 0;
+  float: left;
+  min-height: 1px;
+  padding: 0em 0.15em; }
+
+
+/* Column Widths */
+@for $i from 1 through 100 {
+  .col-#{$i} {
+    width: $i * 1%;
+  }
+}
+
+/* Column translation */
+@for $i from 1 through 100 {
+	// to right
+  .push-#{$i} {
+    left: $i * 1% !important;
+  }
+  // to left
+  .pull-#{$i} {
+    left: $i * -1% !important;
+  }
+  // to bottom
+  .drop-#{$i} {
+    margin-top: $i * 1% !important;
+  }
+  // to top
+  .lift-#{$i} {
+    margin-top: $i * -1% !important;
+  }
+}
+
+.push-left { 
+	float: left;
+	display: inline-block; 
+}
+.push-right {
+	float: right;
+	display: inline-block;
+}
+.clearfix {
+	clear:both; 
+}
+
+
+.no-margin {
+  margin: 0 !important;
+}
+.no-margin-top {
+  margin-top: 0 !important;
+}
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+
