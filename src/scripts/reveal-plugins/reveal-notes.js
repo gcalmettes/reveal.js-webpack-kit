@@ -3,7 +3,7 @@
 // Needed to give the filePath as option
 
 // path for the note.html file
-const filePath = 'js/reveal.js-dependencies/notes.html'
+const filePath = 'lib/js/reveal.js-dependencies/notes.html'
 
 /**
  * Handles opening of and synchronization with the reveal.js

@@ -14,7 +14,7 @@ Reveal.configure(
     },
 
     menu: {
-      path: 'css', // where the menu.css will be found
+      path: 'lib/css', // where the menu.css will be found
       // Specifies which side of the presentation the menu will
       // be shown. Use 'left' or 'right'.
       side: 'left',

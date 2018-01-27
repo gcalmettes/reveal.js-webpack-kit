@@ -1,6 +1,6 @@
 // loads the PDF print stylesheet if ?print-pdf is appended to the URL
 export default (function loadPrintCSS() {
-	const cssPrefix = 'css'
+	const cssPrefix = 'lib/css'
 
 	let link = document.createElement('link')
 	link.rel = 'stylesheet'

@@ -72,11 +72,11 @@ const nodePath = '../node_modules/';
 pluginsArray.push(
   new CopyWebpackPlugin([
     // speaker note base window
-    { from: nodePath + 'reveal.js/plugin/notes/notes.html', to: 'js/reveal.js-dependencies/notes.html' },
+    { from: nodePath + 'reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
     // styles for slides export to to pdf
-    { from: { glob: nodePath + 'reveal.js/css/print/*.css' }, to: 'css/[name].css' },
+    { from: { glob: nodePath + 'reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
     // modified styles for menu.js plugin (compatible with inline svg)
-    { from: 'styles/menu-inline-svg.css', to: 'css/menu.css' },
+    { from: 'styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
     // any files in content
     { context: 'content',
       from: '**/*',
@@ -87,13 +87,19 @@ pluginsArray.push(
 
 // 4- Generate styles file from (scss + css)
 pluginsArray.push(
-  new ExtractTextPlugin({filename:'css/presentation.bundle.css'}),
+  new ExtractTextPlugin({filename:'lib/css/presentation.bundle.css'}),
 )
 
 // 5- When ready for production
-// pluginsArray.push(
-//   new UglifyJsPlugin()
-// )
+// Check if build is running in production mode, then minify it
+if (process.env.NODE_ENV === "production") {
+  console.log("Production!!!!!")
+  // minify the build
+  pluginsArray.push(
+    new UglifyJsPlugin()
+  )
+}
+
 
 //////////////////////////
 // WEBPACK CONFIG ITSELF
@@ -106,7 +112,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'build'),
-    filename: 'js/presentation.bundle.js'
+    filename: 'lib/js/presentation.bundle.js'
   },
   // externals: {
   //   'reveal': {root: 'Reveal'}
@@ -124,11 +130,23 @@ module.exports = {
           { loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/',
-              publicPath: '../' // bundle.css will be in css, need to go back up in the hierarchy
+              outputPath: 'lib/fonts/',
+              publicPath: '../' // bundle.css will be in lib/css, need to go back up in the hierarchy
             }
-          }
+          },
         ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          query: {
+            "presets": [["env", {targets: {
+              uglify: true
+            }}]]
+          },
+        }
       }
     ]
   },
