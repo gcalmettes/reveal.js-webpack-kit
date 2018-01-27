@@ -2,13 +2,16 @@
 //======== MODIFICATION OF REVEAL MATHS.JS PLUGIN TO HAVE FRAGMENTS IN MATHJAX
 //==========================================
 
+// // If Mathjax referenced locally
+// import './../../node_modules/mathjax/MathJax.js'
+
 const RevealMath = window.RevealMath || (function(){
 
-  const options = Reveal.getConfig().math || {};
+  const options = {};
   if (!ALL_LOCAL) {
     options.mathjax = options.mathjax || 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js';
   } else {
-    options.mathjax = options.mathjax || 'js/reveal.js-dependencies/MathJax.js';
+    options.mathjax = options.mathjax || 'lib/js/MathJax.js';
   }
   options.config = options.config || 'TeX-AMS_HTML-full';
 
@@ -32,59 +35,67 @@ const RevealMath = window.RevealMath || (function(){
 
     //=====================================
     // Fragments in Mathjax equations
-    // usage \fragment{1}{x_1} and \fraglight{highlight-blue}{x_1}
-    // and \fragindex{1}{\fraglight{highlight-blue}{x_1}}
+    // usage :
+    // simple fragment appearing, e.g.: \fragment{1}{x_1}
+    // apply style change to present fragment, e.g.: \fragapply{highlight-blue}{x_1}
+    // add specific index to trigger style change for fragment: \fragindex{1}{\fragapply{highlight-blue}{x_1}}
 
-        MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
-            const TEX = MathJax.InputJax.TeX;
+    MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+      const TEX = MathJax.InputJax.TeX;
 
-            TEX.Definitions.Add({macros: {'fragment': 'FRAGMENT_INDEX_attribute'}}); // regular fragments
-            TEX.Definitions.Add({macros: {'fraglight': 'FRAGMENT_highlight'}}); // highlighted fragments
-            TEX.Definitions.Add({macros: {'fragindex': 'FRAGMENT_add_INDEX'}}); // add fragment index to highlighted fragments
-            TEX.Definitions.Add({macros: {'texclass': 'TEX_APPLY_class'}}); // add fragment index to highlighted fragments
+      TEX.Definitions.Add({macros: {'fragment': 'FRAGMENT_INDEX_attribute'}}); // regular fragments
+      TEX.Definitions.Add({macros: {'fragapply': 'FRAGMENT_apply'}}); // style change to fragments
+      TEX.Definitions.Add({macros: {'texclass': 'TEX_APPLY_class'}}); // add any class to an element
 
-            TEX.Parse.Augment({
-              FRAGMENT_INDEX_attribute: function (name) {
-                  const index = this.GetArgument(name);
-                  const arg   = this.ParseArg(name);
-                  this.Push(arg.With({
-                     'class': 'fragment',
-                     attrNames: ['data-fragment-index'],
-                     attr: {'data-fragment-index':index}
-                  }));
-              },
-              FRAGMENT_highlight: function (name) {
-                  const highlight_kind = this.GetArgument(name);
-                  const arg   = this.ParseArg(name);
-                  this.Push(arg.With({
-                     'class': 'fragment ' + highlight_kind
-                  }));
-              },
-              FRAGMENT_add_INDEX: function (name) {
-                  const index = this.GetArgument(name);
-                  const arg   = this.ParseArg(name);
-                  this.Push(arg.With({
-                     attrNames: ['data-fragment-index'],
-                     attr: {'data-fragment-index':index}
-                  }));
-              },
-              TEX_APPLY_class: function (name) {
-                  const class_kind = this.GetArgument(name);
-                  const arg   = this.ParseArg(name);
-                  this.Push(arg.With({
-                     'class': class_kind
-                  }));
-              }
-            });
-        });
+      TEX.Parse.Augment({
+        FRAGMENT_INDEX_attribute: function (name) {
+          const index = this.GetArgument(name);
+          const arg   = this.ParseArg(name);
+          this.Push(arg.With({
+            'class': 'fragment',
+            attrNames: ['data-fragment-index'],
+            attr: {'data-fragment-index':index}
+          }));
+        },
+        FRAGMENT_apply: function (name) {
+          const input = this.GetArgument(name)
+          let [apply_kind, index] = [...input.split(" ")];
+          const arg   = this.ParseArg(name);
+          if (index) {
+            this.Push(arg.With({
+              'class': 'fragapply fragment ' + apply_kind,
+              attrNames: ['data-fragment-index'],
+              attr: {'data-fragment-index':index}
+            }));
+          } else {
+            this.Push(arg.With({
+              'class': 'fragapply fragment ' + apply_kind
+            }));
+          }
+          // index = index === undefined ? 0 : index;
+          // this.Push(arg.With({
+          //   'class': 'fragapply fragment ' + apply_kind,
+          //   attrNames: ['data-fragment-index'],
+          //   attr: {'data-fragment-index':index}
+          // }));
+        },
+        TEX_APPLY_class: function (name) {
+          const class_kind = this.GetArgument(name);
+          const arg   = this.ParseArg(name);
+          this.Push(arg.With({
+             'class': class_kind
+          }));
+        }
+      }); // TEX.parse.argument
+    }); // Mathjax.hub.register
 
-    //=====================================
+    //===================================== END FRAGMENTS
 
     // Reprocess equations in slides when they turn visible
     Reveal.addEventListener( 'slidechanged', function( event ) {
       MathJax.Hub.Queue( [ 'Typeset', MathJax.Hub, event.currentSlide ] );
-    } );
-  });
+    });
+  }); // loadscript
 
   function loadScript( url, callback ) {
 
