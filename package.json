@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
     "build": "NODE_ENV='production' webpack --config 'webpack.config.js'",
-    "build-all-local": "NODE_ENV='production-all-local' webpack --config 'webpack.config.js'"
+    "build-for-web": "NODE_ENV='production-web' webpack --config 'webpack.config.js'",
+    "build-for-local": "NODE_ENV='production-local' webpack --config 'webpack.config.js'"
   },
   "author": "Guillaume Calmettes",
   "license": "BSD-2-Clause",

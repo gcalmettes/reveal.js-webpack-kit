@@ -10,6 +10,24 @@ LANGUAGES.forEach((langName) => {
   hljs.registerLanguage(langName, langModule);
 });
 
+let addFA
+if (FOR_WEB) {
+  // Import Font Awesome using web fonts with css
+  addFA = () => {
+    (function loadStylesheet() {
+      const head = document.querySelector( 'head' );
+      const resource = document.createElement( 'link' );
+      resource.rel = 'stylesheet';
+      resource.href = "https://use.fontawesome.com/releases/v5.0.6/css/all.css";
+      head.appendChild( resource );
+    })()
+  }
+} else {
+  addFA = () => {
+    return false
+  }
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
   window.Reveal = Reveal // plugins need that
 
@@ -39,5 +57,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   // callback function needed for syntax highlithging to work
   hljs.initHighlightingOnLoad()
+  addFA()
 
 })

@@ -97,37 +97,80 @@ pluginsArray.push(
 // 5- When ready for production
 // Check if build is running in production mode, then minify it
 if (process.env.NODE_ENV === "production") {
-  console.log("Production!!!!!")
+  console.log("Production!!!!! Bundle will be minified.")
   // minify the build
   pluginsArray.push(
-    new UglifyJsPlugin()
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        ie8: false,
+        output: {
+          comments: false,
+          beautify: false,
+        },
+        warning: false
+      }
+    })
   )
 
   pluginsArray.push(
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(true),
       ALL_LOCAL: JSON.stringify(false),
+      FOR_WEB: JSON.stringify(false),
       LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
     })
   )
-} else if (process.env.NODE_ENV === "production-all-local") {
-  console.log("Production!!!!! All dependencies will be icluded.")
+} else if (process.env.NODE_ENV === "production-local") {
+  console.log("Production ALL LOCAL!!!!! All dependencies will be icluded.")
   pluginsArray.push(
-    new UglifyJsPlugin()
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        ie8: false,
+        output: {
+          comments: false,
+          beautify: false,
+        }
+      }
+    })
   )
 
   pluginsArray.push(
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(true),
       ALL_LOCAL: JSON.stringify(true),
+      FOR_WEB: JSON.stringify(false),
+      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
+    })
+  )
+} else if (process.env.NODE_ENV === "production-web") {
+  console.log("Production FOR WEB!!!!! Using CDNJS smartly.")
+  pluginsArray.push(
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        ie8: false,
+        output: {
+          comments: false,
+          beautify: false,
+        }
+      }
+    })
+  )
+
+  pluginsArray.push(
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+      ALL_LOCAL: JSON.stringify(false),
+      FOR_WEB: JSON.stringify(true),
       LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
     })
   )
 } else {
+  // No minification when used on web-dev-server to speed up things
   pluginsArray.push(
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(false),
       ALL_LOCAL: JSON.stringify(false),
+      FOR_WEB: JSON.stringify(false),
       LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
     })
   )
@@ -149,7 +192,7 @@ pluginsArray.push(
 // WEBPACK CONFIG ITSELF
 /////////////////////////
 
-module.exports = {
+const config = {
   context: path.join(__dirname, 'src'),
   entry: {
     app: './scripts/main.js'
@@ -194,10 +237,20 @@ module.exports = {
       // }
     ]
   },
-  // watch:true,
+
   devServer: {
     contentBase: path.join(__dirname, "build/"),
     port: 9000
   },
-  plugins: pluginsArray
+
+  plugins: pluginsArray,
+
+  // devtool: "eval-source-map" // Default development sourcemap
 };
+
+// // Check if build is running in production mode, then change the sourcemap type
+// if (process.env.NODE_ENV === ("production"|"production-all-local")) {
+//   config.devtool = "source-map";
+// }
+
+module.exports = config;
