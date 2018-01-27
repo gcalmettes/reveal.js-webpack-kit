@@ -1,4 +1,4 @@
-// From Alexandre Decan
+// From Alexandre Decan (https://github.com/AlexandreDecan/slides/blob/589424a82a67833271328e746c4417511a06a110/assets/custom.js#L1)
 /* Fragment numbering using data-index */
 const fragmentNumbering = function ( event ) {
   const fragments = $(event.currentSlide).find('.fragment');

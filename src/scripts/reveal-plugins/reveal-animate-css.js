@@ -1,5 +1,5 @@
 
-// From Alexandre Decan
+// From Alexandre Decan (https://github.com/hakimel/reveal.js/issues/833#issuecomment-272697592)
 // CSS animations in Reveal (custom or Animate.css)
 
 const RevealAnimate = window.RevealAnimate || (function(){

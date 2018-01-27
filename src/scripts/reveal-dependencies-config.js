@@ -4,11 +4,11 @@
 
 Reveal.configure(
 	{
-		external: {
+    external: {
       async: false // synchorneous loading of httprequest deprecated
     },
 
-		reveald3: {
+  reveald3: {
       mapPath: 'content/',
       tryFallbackURL: true
     },
