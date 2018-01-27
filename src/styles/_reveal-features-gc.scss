@@ -193,6 +193,11 @@ section {
 	}
 }
 
+.inverted{
+  background-color: _invert($backgroundColor, $invertedPercentageBackground);
+  color: _invert($mainColor, $invertedPercentageMain);
+}
+
 /*********************************************
 * Rotation
 *********************************************/
@@ -289,8 +294,6 @@ $angle: 5;
   }
 }
 
-
-
 .no-margin {
   margin: 0 !important;
 }
@@ -301,4 +304,23 @@ $angle: 5;
   margin-bottom: 0 !important;
 }
 
+
+
+/*********************************************
+ * FRAGMENTS
+ *********************************************/
+
+// fragapply latex fragment, when not visible default parameters
+section .fragment.fragapply:not(.visible) {
+  opacity: 1;
+  visibility: inherit;
+  color: inherit;
+  background-color: inherit;
+  font-size: inherit !important;
+}
+
+// .reveal .slides section .fragment.fragapply.visible {
+//   opacity: 1;
+//   visibility: inherit;
+// }
 

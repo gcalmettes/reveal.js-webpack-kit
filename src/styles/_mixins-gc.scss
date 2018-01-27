@@ -3,3 +3,25 @@
 	color: white; 
 	font-variant: small-caps;
 }
+
+@function invert-channel($channel, $upper, $lower) {
+    @return 255 - round($lower + $channel*($upper - $lower)/255);
+}
+
+@function _invert($original, $percentage) {
+    $upper: ($percentage/100%)*255;
+    $lower: 255 - $upper;
+    $alpha: alpha($original);
+
+    $inverted-channels: ();
+
+    @each $channel-name in 'red' 'green' 'blue' {
+        $channel: call($channel-name, $original);
+        $inverted-channel: invert-channel($channel, $upper, $lower);
+        $inverted-channels: append($inverted-channels, $inverted-channel);
+    }
+
+    $inverted-channels: append($inverted-channels, $alpha);
+
+    @return rgba($inverted-channels...);
+}
