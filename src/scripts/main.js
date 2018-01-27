@@ -17,9 +17,10 @@ fontawesome.library.add(solid, regular, brands)
 // allow search pseudo elements in CSS (e.g. :after )
 fontawesome.config['searchPseudoElements'] = true
 
+console.log(PRODUCTION)
+console.log(ALL_LOCAL)
 // // If Mathjax referenced locally
 // import './../../node_modules/mathjax/MathJax.js'
-
 
 /////////////////////////
 // STYLE IMPORTS

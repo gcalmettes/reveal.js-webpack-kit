@@ -1,18 +1,14 @@
 ////////////////////////////
-// Reveal.js and extensions
+// Reveal.js initialization
 ///////////////////////////
 
-// import head from 'reveal.js/lib/js/head.min'
-
-
-///////////////////////////
-// initialization
-//////////////////////////
-
-import hljs from './../../node_modules/highlight.js/lib/index.js'
-
-
-// const dependencyPath = 'js/reveal.js-dependencies/';
+import hljs from './../../node_modules/highlight.js/lib/highlight.js';
+// import only selected languages (defined in webpack.config.js)
+LANGUAGES.forEach((langName) => {
+  // Using require() here because import() support hasn't landed in Webpack yet
+  const langModule = require(`highlight.js/lib/languages/${langName}`);
+  hljs.registerLanguage(langName, langModule);
+});
 
 document.addEventListener('DOMContentLoaded', (event) => {
   window.Reveal = Reveal // plugins need that
@@ -40,7 +36,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
     }
   });
-  
+
   // callback function needed for syntax highlithging to work
   hljs.initHighlightingOnLoad()
 

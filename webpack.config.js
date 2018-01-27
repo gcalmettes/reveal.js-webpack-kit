@@ -6,6 +6,10 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+// Limited selection of languages for highlight.js
+const HIGHLIGHT_LANG = ['javascript', 'python', 'bash']
 
 ////////////////////////
 // Helper functions
@@ -98,8 +102,48 @@ if (process.env.NODE_ENV === "production") {
   pluginsArray.push(
     new UglifyJsPlugin()
   )
+
+  pluginsArray.push(
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+      ALL_LOCAL: JSON.stringify(false),
+      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
+    })
+  )
+} else if (process.env.NODE_ENV === "production-all-local") {
+  console.log("Production!!!!! All dependencies will be icluded.")
+  pluginsArray.push(
+    new UglifyJsPlugin()
+  )
+
+  pluginsArray.push(
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(true),
+      ALL_LOCAL: JSON.stringify(true),
+      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
+    })
+  )
+} else {
+  pluginsArray.push(
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(false),
+      ALL_LOCAL: JSON.stringify(false),
+      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
+    })
+  )
 }
 
+pluginsArray.push(
+  new webpack.ContextReplacementPlugin(
+      /highlight\.js\/lib\/languages$/,
+      new RegExp(`^./(${HIGHLIGHT_LANG.join('|')})$`),
+    )
+)
+
+// If want analyzis of bundle size
+// pluginsArray.push(
+//   new BundleAnalyzerPlugin()
+// )
 
 //////////////////////////
 // WEBPACK CONFIG ITSELF
@@ -136,18 +180,18 @@ module.exports = {
           },
         ]
       },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          query: {
-            "presets": [["env", {targets: {
-              uglify: true
-            }}]]
-          },
-        }
-      }
+      // {
+      //   test: /\.js$/,
+      //   exclude: /node_modules/,
+      //   use: {
+      //     loader: "babel-loader",
+      //     query: {
+      //       "presets": [["env", {targets: {
+      //         uglify: true
+      //       }}]]
+      //     },
+      //   }
+      // }
     ]
   },
   // watch:true,

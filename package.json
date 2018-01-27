@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server",
-    "build": "NODE_ENV='production' webpack --config 'webpack.config.js'"
+    "build": "NODE_ENV='production' webpack --config 'webpack.config.js'",
+    "build-all-local": "NODE_ENV='production-all-local' webpack --config 'webpack.config.js'"
   },
   "author": "Guillaume Calmettes",
   "license": "BSD-2-Clause",
@@ -23,6 +24,7 @@
     "style-loader": "^0.19.1",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0",
+    "webpack-bundle-analyzer": "^2.9.2",
     "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {

@@ -5,9 +5,14 @@
 const RevealMath = window.RevealMath || (function(){
 
   const options = Reveal.getConfig().math || {};
-  options.mathjax = options.mathjax || 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js';
-  // options.mathjax = options.mathjax || 'js/reveal.js-dependencies/MathJax.js';
+  if (!ALL_LOCAL) {
+    options.mathjax = options.mathjax || 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js';
+  } else {
+    options.mathjax = options.mathjax || 'js/reveal.js-dependencies/MathJax.js';
+  }
   options.config = options.config || 'TeX-AMS_HTML-full';
+
+  // console.log(options.mathjax)
 
   loadScript( options.mathjax + '?config=' + options.config, function() {
 
