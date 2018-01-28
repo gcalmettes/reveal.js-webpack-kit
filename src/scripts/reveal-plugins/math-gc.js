@@ -1,46 +1,30 @@
-//==========================================
-//======== MODIFICATION OF REVEAL MATHS.JS PLUGIN TO HAVE FRAGMENTS IN MATHJAX
-//==========================================
+// // based on https://github.com/hakimel/reveal.js/issues/1365#issue-107518558
+// MathJax.Hub.Register.StartupHook("TeX Jax Ready", function () {
+//   var TeX = MathJax.InputJax.TeX;
+//   TeX.Definitions.Add({macros: {'fragment': 'FRAGMENT_INDEX_attribute'}});
+//   TeX.Parse.Augment({
+//       FRAGMENT_INDEX_attribute: function (name) {
+//           var d = {'class': 'fragment'};
 
-// // If Mathjax referenced locally
-// import './../../node_modules/mathjax/MathJax.js'
+//           var index = this.GetBrackets(name);
+//           if (index !== undefined && index !== '') {
+//               d.attr = {'data-fragment-index': index};
+//               d.attrNames = ['data-fragment-index'];
+//           }
 
-const RevealMath = window.RevealMath || (function(){
+//           var extraclass = this.GetBrackets(name);
+//           if (extraclass !== undefined) {
+//               d.class += ' ' + extraclass;
+//           }
 
-  const options = {};
-  if (!ALL_LOCAL) {
-    options.mathjax = options.mathjax || 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js';
-  } else {
-    options.mathjax = options.mathjax || 'lib/js/MathJax.js';
-  }
-  options.config = options.config || 'TeX-AMS_HTML-full';
+//           var arg = this.ParseArg(name);
 
-  // console.log(options.mathjax)
+//           this.Push(arg.With(d));
+//       }
+//   });
+// });
 
-  loadScript( options.mathjax + '?config=' + options.config, function() {
-
-    MathJax.Hub.Config({
-      messageStyle: 'none',
-      tex2jax: {
-        inlineMath: [['$','$'],['\\(','\\)']] ,
-        skipTags: ['script','noscript','style','textarea','pre']
-      },
-      skipStartupTypeset: true
-    });
-
-    // Typeset followed by an immediate reveal.js layout since
-    // the typesetting process could affect slide height
-    MathJax.Hub.Queue( [ 'Typeset', MathJax.Hub ] );
-    MathJax.Hub.Queue( Reveal.layout );
-
-    //=====================================
-    // Fragments in Mathjax equations
-    // usage :
-    // simple fragment appearing, e.g.: \fragment{1}{x_1}
-    // apply style change to present fragment, e.g.: \fragapply{highlight-blue}{x_1}
-    // add specific index to trigger style change for fragment: \fragindex{1}{\fragapply{highlight-blue}{x_1}}
-
-    MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       const TEX = MathJax.InputJax.TeX;
 
       TEX.Definitions.Add({macros: {
@@ -85,50 +69,4 @@ const RevealMath = window.RevealMath || (function(){
       }); // TEX.parse.argument
     }); // Mathjax.hub.register
 
-    //===================================== END FRAGMENTS
-
-    // Reprocess equations in slides when they turn visible
-    Reveal.addEventListener( 'slidechanged', function( event ) {
-      MathJax.Hub.Queue( [ 'Typeset', MathJax.Hub, event.currentSlide ] );
-
-      // clean up false fragment created during Mathjax process
-      const slide = event.currentSlide
-      let slideFragments = Array.prototype.slice.call(slide.querySelectorAll( '.fragment' ))
-      slideFragments = slideFragments.filter(d => d.nodeName !== "SPAN")
-      for (let i=0; i<slideFragments.length; i++){
-        slideFragments[i].classList.remove("fragment");
-      }
-      
-    });
-  }); // loadscript
-
-  function loadScript( url, callback ) {
-
-    const head = document.querySelector( 'head' );
-    const script = document.createElement( 'script' );
-    script.type = 'text/javascript';
-    script.src = url;
-
-    // Wrapper for callback to make sure it only fires once
-    const finish = function() {
-      if( typeof callback === 'function' ) {
-        callback.call();
-        callback = null;
-      }
-    }
-
-    script.onload = finish;
-
-    // IE
-    script.onreadystatechange = function() {
-      if ( this.readyState === 'loaded' ) {
-        finish();
-      }
-    }
-
-    // Normal browsers
-    head.appendChild( script );
-
-  }
-
-})();
+MathJax.Ajax.loadComplete('/Users/Gui/Desktop/mathjax-preprocessing-test/src/scripts/reveal-plugins/math-gc.js');

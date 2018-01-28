@@ -10,10 +10,10 @@ LANGUAGES.forEach((langName) => {
   hljs.registerLanguage(langName, langModule);
 });
 
-let addFA
+let addFontAwesome
 if (FOR_WEB) {
   // Import Font Awesome using web fonts with css
-  addFA = () => {
+  addFontAwesome = () => {
     (function loadStylesheet() {
       const head = document.querySelector( 'head' );
       const resource = document.createElement( 'link' );
@@ -23,7 +23,7 @@ if (FOR_WEB) {
     })()
   }
 } else {
-  addFA = () => {
+  addFontAwesome = () => {
     return false
   }
 }
@@ -57,6 +57,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   // callback function needed for syntax highlithging to work
   hljs.initHighlightingOnLoad()
-  addFA()
+  addFontAwesome()
 
 })

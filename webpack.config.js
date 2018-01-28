@@ -5,6 +5,8 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const HtmlMxPlugin = require('./src/scripts/mathjax-to-svg-module.js')
+
 
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -176,11 +178,29 @@ if (process.env.NODE_ENV === "production") {
   )
 }
 
+// select only specific languages in highlight
 pluginsArray.push(
   new webpack.ContextReplacementPlugin(
       /highlight\.js\/lib\/languages$/,
       new RegExp(`^./(${HIGHLIGHT_LANG.join('|')})$`),
     )
+)
+
+pluginsArray.push(
+  new HtmlMxPlugin({
+    pageConfigs: { 
+      format: ["TeX"],
+      singleDollars: true,
+      cssInline: false,
+      extensions: path.join(__dirname, 'src/scripts/reveal-plugins/math-gc.js')
+    },
+    mjxNodeConfigs: {
+     svg: true ,
+     linebreaks: false,
+     useFontCache: true, // use <defs> and <use> in svg output?
+      useGlobalCache: false, // use common <defs> for all equations?
+    }
+  })
 )
 
 // If want analyzis of bundle size

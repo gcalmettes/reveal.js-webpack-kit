@@ -13,7 +13,7 @@ import './../../node_modules/reveal.js/lib/js/classList.js'
 // Speaker notes
 import './reveal-plugins/reveal-notes.js'
 // Modified Math.js to integrate special fragments capabilities in latex equations
-import './reveal-plugins/math-gc.js'
+// import './reveal-plugins/math-gc.js'
 // Include animate.css animations
 import './reveal-plugins/reveal-animate-css.js'
 // Fragment numbering with "data-index"
