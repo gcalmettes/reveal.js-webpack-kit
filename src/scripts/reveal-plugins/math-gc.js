@@ -43,9 +43,11 @@ const RevealMath = window.RevealMath || (function(){
     MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       const TEX = MathJax.InputJax.TeX;
 
-      TEX.Definitions.Add({macros: {'fragment': 'FRAGMENT_INDEX_attribute'}}); // regular fragments
-      TEX.Definitions.Add({macros: {'fragapply': 'FRAGMENT_apply'}}); // style change to fragments
-      TEX.Definitions.Add({macros: {'texclass': 'TEX_APPLY_class'}}); // add any class to an element
+      TEX.Definitions.Add({macros: {
+        'fragment': 'FRAGMENT_INDEX_attribute', // regular fragments
+        'fragapply': 'FRAGMENT_apply', // style change to fragments
+        'texclass': 'TEX_APPLY_class' // add any class to an element
+      }}); 
 
       TEX.Parse.Augment({
         FRAGMENT_INDEX_attribute: function (name) {
@@ -72,12 +74,6 @@ const RevealMath = window.RevealMath || (function(){
               'class': 'fragapply fragment ' + apply_kind
             }));
           }
-          // index = index === undefined ? 0 : index;
-          // this.Push(arg.With({
-          //   'class': 'fragapply fragment ' + apply_kind,
-          //   attrNames: ['data-fragment-index'],
-          //   attr: {'data-fragment-index':index}
-          // }));
         },
         TEX_APPLY_class: function (name) {
           const class_kind = this.GetArgument(name);
@@ -94,6 +90,15 @@ const RevealMath = window.RevealMath || (function(){
     // Reprocess equations in slides when they turn visible
     Reveal.addEventListener( 'slidechanged', function( event ) {
       MathJax.Hub.Queue( [ 'Typeset', MathJax.Hub, event.currentSlide ] );
+
+      // clean up false fragment created during Mathjax process
+      const slide = event.currentSlide
+      let slideFragments = Array.prototype.slice.call(slide.querySelectorAll( '.fragment' ))
+      slideFragments = slideFragments.filter(d => d.nodeName !== "SPAN")
+      for (let i=0; i<slideFragments.length; i++){
+        slideFragments[i].classList.remove("fragment");
+      }
+      
     });
   }); // loadscript
 
