@@ -59,10 +59,84 @@ section .inline-block {
 	}
 }
 
+/*********************************************
+* BORDERS
+*********************************************/
+
+body section {
+  & .rounded { 
+    border-radius: $borderRadius;
+  }
+  & .bordered {
+    border: $borderThickness solid;
+  }
+  & .circled {
+    border-radius: 50%; 
+  }
+}
+
+// thickness
+@for $i from 2 through 10 {
+  .border-#{$i}x {
+    border: $i * $borderThickness solid !important;
+  }
+}
+
+// style
+// Common lists
+$borderStyles: dotted, dashed, solid, none;
+
+@each $style in $borderStyles {
+  .border-#{$style} {
+    border-style: $style !important; 
+  }
+}
+
+
+// .ba { border-style: solid; border-width: 1px; }
+// .bt { border-top-style: solid; border-top-width: 1px; }
+// .br { border-right-style: solid; border-right-width: 1px; }
+// .bb { border-bottom-style: solid; border-bottom-width: 1px; }
+// .bl { border-left-style: solid; border-left-width: 1px; }
+// .bn { border-style: none; border-width: 0; }
+
+// .br0 { border-radius: 0 !important; }
+// .br1 { border-radius: .125rem !important; }
+// .br2 { border-radius: .25rem !important; }
+// .br3 { border-radius: .5rem !important; }
+// .br4 { border-radius: 1rem !important; }
+// .br-100 { border-radius: 100% !important; }
+// .br-pill { border-radius: 9999px !important; }
+// .br--bottom {
+//     border-top-left-radius: 0 !important;
+//     border-top-right-radius: 0 !important;
+// }
+// .br--top {
+//     border-bottom-left-radius: 0 !important;
+//     border-bottom-right-radius: 0 !important;
+// }
+// .br--right {
+//     border-top-left-radius: 0 !important;
+//     border-bottom-left-radius: 0 !important;
+// }
+// .br--left {
+//     border-top-right-radius: 0 !important;
+//     border-bottom-right-radius: 0 !important;
+// }
 
 /*********************************************
 * TEXT STYLING
 *********************************************/
+
+// Fonts
+$fontsList: (
+  passionone: 'Passion One');
+
+@each $font, $family in $fontsList {
+  section .font-#{$font}{
+    font-family: $family !important;
+  }
+}
 
 /////////////////////
 // Size
@@ -74,7 +148,9 @@ $sizesList: (
 	normal: $normal,
 	big: $big,
 	bigger: $bigger,
-	biggest: $biggest
+	biggest: $biggest,
+  huge: $huge,
+  extreme: $extreme
 );
 
 @each $name, $size in $sizesList {
@@ -107,12 +183,12 @@ $alignList: left, right, center, justify;
 section {
 	& .framed,
 		.boxed {
-  border: $borderThickness solid lighten($borderColor, 50%);
+  border: $borderThickness solid $borderColor;
   padding-left: 10px;
   padding-right: 10px;
 	}
 	& .framed {
-		  border-radius: 10px;
+		  border-radius: $borderRadius;
 	}
 	& .padded,
 	  .sided,
@@ -158,7 +234,6 @@ section {
 }
 
 
-
 /////////////////////
 // COLOR Related
 
@@ -191,10 +266,23 @@ section {
 	.border-#{$name} {
 		border-color: $color !important;
 	}
+  // background with alpha opacity
+  @for $i from 1 through 9 {
+    .bg-#{$name}-alpha-0#{$i} {
+      @include background-opacity($color, $i * 0.1);
+    }
+  }
 }
 
+// color inversion
 .inverted{
   background-color: _invert($backgroundColor, $invertedPercentageBackground);
+  color: _invert($mainColor, $invertedPercentageMain);
+}
+.inverted-bg{
+  background-color: _invert($backgroundColor, $invertedPercentageBackground);
+}
+.inverted-color{
   color: _invert($mainColor, $invertedPercentageMain);
 }
 
@@ -239,7 +327,7 @@ $angle: 5;
 /* Column Widths */
 @for $i from 1 through 100 {
   .col-#{$i} {
-    width: $i * 1%;
+    width: $i * 1% !important;
   }
 }
 
@@ -303,8 +391,6 @@ $angle: 5;
 .no-margin-bottom {
   margin-bottom: 0 !important;
 }
-
-
 
 /*********************************************
  * FRAGMENTS

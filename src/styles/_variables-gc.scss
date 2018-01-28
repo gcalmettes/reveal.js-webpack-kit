@@ -4,6 +4,7 @@
 $backgroundColor: #fcf8e3;//#EEF0E8;
 $mainColor: #222;
 $headingColor: #222;
+$contentBoxColor: lighten($mainColor, 50%);
 
 $invertedPercentageBackground: 80%;
 $invertedPercentageMain: 100%;
@@ -49,6 +50,8 @@ $normal: 0.9em;
 $big: 1.1em;
 $bigger: 1.25em;
 $biggest: 1.5em;
+$huge: 3em;
+$extreme: 5em;
 
 
 // BORDERS
@@ -56,6 +59,7 @@ $biggest: 1.5em;
 $borderColor: black;
 $borderThickness: 2px;
 $borderSidedThickness: 10px;
+$borderRadius: 15px;
 
 // OTHERS
 

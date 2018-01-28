@@ -1,7 +1,9 @@
 // Global Reveal js style
 @import "../../node_modules/reveal.js/css/reveal.scss";
 // For code syntax highlighting
-@import "../../node_modules/reveal.js/lib/css/zenburn.css";
+// @import "../../node_modules/reveal.js/lib/css/zenburn.css";
+@import "../../node_modules/highlight.js/styles/atom-one-dark.css";
+
 
 // custom theme style
 @import "./_reveal-theme-gc.scss";

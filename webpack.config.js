@@ -9,7 +9,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Limited selection of languages for highlight.js
-const HIGHLIGHT_LANG = ['javascript', 'python', 'bash']
+const HIGHLIGHT_LANG = ['xml', 'javascript', 'python', 'bash']
 
 ////////////////////////
 // Helper functions
