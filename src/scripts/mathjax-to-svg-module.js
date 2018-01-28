@@ -3,7 +3,25 @@ const mjpage = require('mathjax-node-page/lib/main.js').mjpage
 
 function HthmlMxPlugin(options) {
   // Default options
-  this.options = options;
+  config = options || {pageConfigs: {}, mjxNodeConfigs: {}}
+
+    this.options = {
+      pageConfigs: Object.assign(
+        { format: ["TeX"],
+          singleDollars: true,
+          cssInline: false
+        },
+        config.pageConfigs
+      ),
+      mjxNodeConfigs: Object.assign(
+        { svg: true ,
+          linebreaks: false,
+          useFontCache: true, // use <defs> and <use> in svg output?
+          useGlobalCache: false, // use common <defs> for all equations?
+        },
+        config.mjxNodeConfigs
+      )
+    }
 }
 
 HthmlMxPlugin.prototype.apply = function(compiler) {
