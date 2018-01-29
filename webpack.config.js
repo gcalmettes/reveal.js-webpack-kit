@@ -9,7 +9,12 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Limited selection of languages for highlight.js
-const HIGHLIGHT_LANG = ['xml', 'javascript', 'python', 'bash']
+const configEnv = {
+  HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
+  PRODUCTION: JSON.stringify((process.env.NODE_ENV === "production") ? true : false),
+  FOR_WEB: JSON.stringify((process.env.NODE_ENV === "production-web") ? true : false),
+  SERVER_RENDERING: JSON.stringify((process.env.NODE_ENV === "production-server-rendering") ? true : false),
+}
 
 ////////////////////////
 // Helper functions
@@ -94,7 +99,18 @@ pluginsArray.push(
   new ExtractTextPlugin({filename:'lib/css/presentation.bundle.css'}),
 )
 
-// 5- When ready for production
+// 5- Define global variables to be accessed during webpack processing
+pluginsArray.push(
+  new webpack.DefinePlugin({
+    HIGHLIGHT_LANGUAGES: configEnv.HIGHLIGHT_LANGUAGES,
+    PRODUCTION: configEnv.PRODUCTION,
+    FOR_WEB: configEnv.FOR_WEB,
+    SERVER_RENDERING: configEnv.SERVER_RENDERING
+  })
+) 
+
+
+// 6- When ready for production
 // Check if build is running in production mode, then minify it
 if (process.env.NODE_ENV === "production") {
   console.log("Production!!!!! Bundle will be minified.")
@@ -112,16 +128,8 @@ if (process.env.NODE_ENV === "production") {
     })
   )
 
-  pluginsArray.push(
-    new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(true),
-      ALL_LOCAL: JSON.stringify(false),
-      FOR_WEB: JSON.stringify(false),
-      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
-    })
-  )
-} else if (process.env.NODE_ENV === "production-local") {
-  console.log("Production ALL LOCAL!!!!! All dependencies will be icluded.")
+} else if (process.env.NODE_ENV === "production-server-rendering") {
+  console.log("Production SERVER RENDERING!!!!! FA and MJ will be pre-rendered on server side.")
   pluginsArray.push(
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -134,16 +142,8 @@ if (process.env.NODE_ENV === "production") {
     })
   )
 
-  pluginsArray.push(
-    new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(true),
-      ALL_LOCAL: JSON.stringify(true),
-      FOR_WEB: JSON.stringify(false),
-      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
-    })
-  )
 } else if (process.env.NODE_ENV === "production-web") {
-  console.log("Production FOR WEB!!!!! Using CDNJS smartly.")
+  console.log("Production FOR WEB!!!!! Linking FA and Mathjax to web ressources.")
   pluginsArray.push(
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -153,25 +153,6 @@ if (process.env.NODE_ENV === "production") {
           beautify: false,
         }
       }
-    })
-  )
-
-  pluginsArray.push(
-    new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(true),
-      ALL_LOCAL: JSON.stringify(false),
-      FOR_WEB: JSON.stringify(true),
-      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
-    })
-  )
-} else {
-  // No minification when used on web-dev-server to speed up things
-  pluginsArray.push(
-    new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(false),
-      ALL_LOCAL: JSON.stringify(false),
-      FOR_WEB: JSON.stringify(false),
-      LANGUAGES: JSON.stringify(HIGHLIGHT_LANG)
     })
   )
 }
@@ -179,7 +160,7 @@ if (process.env.NODE_ENV === "production") {
 pluginsArray.push(
   new webpack.ContextReplacementPlugin(
       /highlight\.js\/lib\/languages$/,
-      new RegExp(`^./(${HIGHLIGHT_LANG.join('|')})$`),
+      new RegExp(`^./(${configEnv.HIGHLIGHT_LANGUAGES.join('|')})$`),
     )
 )
 

@@ -4,7 +4,7 @@
 
 import hljs from './../../node_modules/highlight.js/lib/highlight.js';
 // import only selected languages (defined in webpack.config.js)
-LANGUAGES.forEach((langName) => {
+HIGHLIGHT_LANGUAGES.forEach((langName) => {
   // Using require() here because import() support hasn't landed in Webpack yet
   const langModule = require(`highlight.js/lib/languages/${langName}`);
   hljs.registerLanguage(langName, langModule);
