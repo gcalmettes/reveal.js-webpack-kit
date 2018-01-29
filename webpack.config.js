@@ -1,178 +1,32 @@
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const gchelpers =  require('./src/scripts/helpers.js')
 
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-// Limited selection of languages for highlight.js
+/* ENVIRONMENT CONFIG */
 const configEnv = {
   HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
-  PRODUCTION: JSON.stringify((process.env.NODE_ENV === "production") ? true : false),
-  FOR_WEB: JSON.stringify((process.env.NODE_ENV === "production-web") ? true : false),
-  SERVER_RENDERING: JSON.stringify((process.env.NODE_ENV === "production-server-rendering") ? true : false),
+  DEV: (process.env.NODE_ENV === "dev-server") ? true : false,
+  PRODUCTION: (process.env.NODE_ENV === "production") ? true : false,
+  FOR_WEB: (process.env.NODE_ENV === "production-web") ? true : false,
+  SERVER_RENDERING: (process.env.NODE_ENV === "production-server-rendering") ? true : false,
+  UGLIFY: (process.env.NODE_ENV === "production-web") ? false : true,
+  BUNDLE_ANALYSIS: false,
+  MESSAGES_HASH: {
+    "production": `Production!!!!! Minification: ${(process.env.NODE_ENV === "production-web") ? false : true}.`,
+    "production-web": `Production FOR WEB!!!!! Linking FA and Mathjax to web ressources. Minification: ${(process.env.NODE_ENV === "production-web") ? false : true}.`,
+    "production-server-rendering": `Production SERVER RENDERING!!!!! FA and MJ will be pre-rendered on server side. Minification: ${(process.env.NODE_ENV === "production-web") ? false : true}.`,
+  }
 }
 
-////////////////////////
-// Helper functions
-////////////////////////
-
-// get all the html templates (all the lectures)
-function getEntries (path) {
-  return fs.readdirSync(path)
-    .filter(file => file.match(/.*\.html$/))
-    .map(file => {
-      return {
-        name: file.substring(0, file.length - 5),
-        path: file
-      }
-    }).reduce((memo, file) => {
-      memo[file.name] = file.path
-      return memo
-    }, {})
-}
-
-// generate a HTMLPlugin instance per html file
-function getAllHTMLPlugins (htmlFiles) {
-  return Object.entries(htmlFiles).map(([key, value]) => {
-    return new HtmlWebpackPlugin({
-            title: key,
-            template: './' + value,
-            filename: './' + value
-        })
-  })
-}
-
-////////////////////////////////////////
-// PLUGINS ARRAY to be fed into webpack
-////////////////////////////////////////
-
-// 1- Add of all the HTMLplugin instances
-let pluginsArray = getAllHTMLPlugins(getEntries('./src/'))
-
-// 2- Add specific module replacement instance to fix wrong url
-// as .css file imports will compile to CSS @import rules, the following is necessary
-// since the url in white.scss will be wrong
-pluginsArray.push(
-  new webpack.NormalModuleReplacementPlugin(
-    new RegExp('../../lib/font/source-sans-pro/source-sans-pro.css'),
-    'reveal.js/lib/font/source-sans-pro/source-sans-pro.css')
-  )
-
-// 3- Those library will be directly available on the global scope
-// (JQuery needed for custom animations to work in Reveal (reveal-animate-css.js))
-pluginsArray.push(
-  new webpack.ProvidePlugin({
-    $: 'jquery',
-    jQuery: 'jquery'
-  })
-)
-pluginsArray.push(
-  new webpack.ProvidePlugin({
-    Reveal: 'reveal.js'
-  })
-)
-
-// 4- Copy some needed files in hierarchy
-const nodePath = '../node_modules/';
-pluginsArray.push(
-  new CopyWebpackPlugin([
-    // speaker note base window
-    { from: nodePath + 'reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
-    // styles for slides export to to pdf
-    { from: { glob: nodePath + 'reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
-    // modified styles for menu.js plugin (compatible with inline svg)
-    { from: 'styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
-    // any files in content
-    { context: 'content',
-      from: '**/*',
-      to: 'content/'
-    }
-  ])
-)
-
-// 4- Generate styles file from (scss + css)
-pluginsArray.push(
-  new ExtractTextPlugin({filename:'lib/css/presentation.bundle.css'}),
-)
-
-// 5- Define global variables to be accessed during webpack processing
-pluginsArray.push(
-  new webpack.DefinePlugin({
-    HIGHLIGHT_LANGUAGES: configEnv.HIGHLIGHT_LANGUAGES,
-    PRODUCTION: configEnv.PRODUCTION,
-    FOR_WEB: configEnv.FOR_WEB,
-    SERVER_RENDERING: configEnv.SERVER_RENDERING
-  })
-) 
+console.log(configEnv.MESSAGES_HASH[process.env.NODE_ENV])
 
 
-// 6- When ready for production
-// Check if build is running in production mode, then minify it
-if (process.env.NODE_ENV === "production") {
-  console.log("Production!!!!! Bundle will be minified.")
-  // minify the build
-  pluginsArray.push(
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        ie8: false,
-        output: {
-          comments: false,
-          beautify: false,
-        },
-        warning: false
-      }
-    })
-  )
-
-} else if (process.env.NODE_ENV === "production-server-rendering") {
-  console.log("Production SERVER RENDERING!!!!! FA and MJ will be pre-rendered on server side.")
-  pluginsArray.push(
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        ie8: false,
-        output: {
-          comments: false,
-          beautify: false,
-        }
-      }
-    })
-  )
-
-} else if (process.env.NODE_ENV === "production-web") {
-  console.log("Production FOR WEB!!!!! Linking FA and Mathjax to web ressources.")
-  pluginsArray.push(
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        ie8: false,
-        output: {
-          comments: false,
-          beautify: false,
-        }
-      }
-    })
-  )
-}
-
-pluginsArray.push(
-  new webpack.ContextReplacementPlugin(
-      /highlight\.js\/lib\/languages$/,
-      new RegExp(`^./(${configEnv.HIGHLIGHT_LANGUAGES.join('|')})$`),
-    )
-)
-
-// If want analyzis of bundle size
-// pluginsArray.push(
-//   new BundleAnalyzerPlugin()
-// )
-
-//////////////////////////
-// WEBPACK CONFIG ITSELF
-/////////////////////////
-
+/* WEBPACK CONFIG ITSELF */
 const config = {
   context: path.join(__dirname, 'src'),
   entry: {
@@ -182,15 +36,12 @@ const config = {
     path: path.join(__dirname, 'build'),
     filename: 'lib/js/presentation.bundle.js'
   },
-  // externals: {
-  //   'reveal': {root: 'Reveal'}
-  // },
   module: {
     rules:[
       { test:/\.(s*)css$/,
         use: ExtractTextPlugin.extract({
-              fallback:'style-loader',
-              use:['css-loader', 'sass-loader']
+          fallback:'style-loader',
+          use:['css-loader', 'sass-loader']
         })
       },
       { test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
@@ -201,37 +52,72 @@ const config = {
               outputPath: 'lib/fonts/',
               publicPath: '../' // bundle.css will be in lib/css, need to go back up in the hierarchy
             }
-          },
+          }
         ]
       },
-      // {
-      //   test: /\.js$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: "babel-loader",
-      //     query: {
-      //       "presets": [["env", {targets: {
-      //         uglify: true
-      //       }}]]
-      //     },
-      //   }
-      // },
     ]
   },
-
   devServer: {
     contentBase: path.join(__dirname, "build/"),
     port: 9000
   },
-
-  plugins: pluginsArray,
-
-  // devtool: "eval-source-map" // Default development sourcemap
+  plugins: [
+    /* HtmlWebpackPlugin instances (one per html files found in './src/') */
+    ...gchelpers.getAllHTMLPlugins(
+      gchelpers.getEntries('./src/')
+    ),
+    /* Those library will be directly available on the global scope
+      (JQuery needed for custom animations to work in Reveal (reveal-animate-css.js)) */
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      Reveal: 'reveal.js'
+    }),
+    /* Copy some needed files in hierarchy */
+    new CopyWebpackPlugin([
+      // speaker note base window
+      { from: '../node_modules/reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
+      // styles for slides export to to pdf
+      { from: { glob: '../node_modules/reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
+      // modified styles for menu.js plugin (compatible with inline svg)
+      { from: 'styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
+      // any files in content
+      { context: 'content',
+        from: '**/*',
+        to: 'content/'
+      }
+    ]),
+    /* Generate styles file from (scss + css) */
+    new ExtractTextPlugin(
+      {filename:'lib/css/presentation.bundle.css'}
+    ),
+    /* Define global variables to be accessed during webpack processing */
+    new webpack.DefinePlugin({
+      HIGHLIGHT_LANGUAGES: configEnv.HIGHLIGHT_LANGUAGES,
+      PRODUCTION: configEnv.PRODUCTION,
+      FOR_WEB: configEnv.FOR_WEB,
+      SERVER_RENDERING: configEnv.SERVER_RENDERING
+    }),
+    /* Include only Highlights.js languages that are specified in configEnvs.HIGHLIGHT_LANGUAGES */
+    new webpack.ContextReplacementPlugin(
+      /highlight\.js\/lib\/languages$/,
+      new RegExp(`^./(${configEnv.HIGHLIGHT_LANGUAGES.join('|')})$`),
+    ),
+    /* Minifying bundle */
+    (configEnv.UGLIFY) ? 
+      new UglifyJsPlugin({
+          uglifyOptions: {
+            ie8: false,
+            output: {
+              comments: false,
+              beautify: false,
+            }
+          }
+        }) : gchelpers.DummyPlugin(),
+    /* If Bundle Analysis set to true in configEnv */
+    (configEnv.BUNDLE_ANALYSIS && !configEnv.DEV_SERVER) ?
+      new BundleAnalyzerPlugin() : gchelpers.DummyPlugin()
+  ],
 };
-
-// // Check if build is running in production mode, then change the sourcemap type
-// if (process.env.NODE_ENV === ("production"|"production-all-local")) {
-//   config.devtool = "source-map";
-// }
 
 module.exports = config;
