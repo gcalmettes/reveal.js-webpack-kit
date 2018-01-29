@@ -6,12 +6,24 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const fs = require('fs')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlMxPlugin = require('./src/scripts/mathjax-to-svg-module.js')
-
-
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Limited selection of languages for highlight.js
 const HIGHLIGHT_LANG = ['xml', 'javascript', 'python', 'bash']
+
+// Insertion of path of Mathjax extension in math-gc.js (create from template)
+const pathToMathPlugin = path.join(__dirname, 'src/scripts/reveal-plugins/math-gc.js')
+const pathToMathPluginTemplate = path.join(__dirname, 'src/scripts/reveal-plugins/math-gc-template.txt')
+let temp = fs.readFileSync(pathToMathPluginTemplate)
+  .toString()
+  .replace(/<!-- path-to-math-gc.js -->/, pathToMathPlugin)
+fs.writeFile(pathToMathPlugin, temp, err => {
+  if (err) throw err;
+  // success case, the file was saved
+  console.log(`math-gc.js file saved at: ${pathToMathPlugin}`);
+})
+
+
 
 ////////////////////////
 // Helper functions
@@ -192,13 +204,13 @@ pluginsArray.push(
       format: ["TeX"],
       singleDollars: true,
       cssInline: false,
-      extensions: path.join(__dirname, 'src/scripts/reveal-plugins/math-gc.js')
+      extensions: pathToMathPlugin//path.join(__dirname, 'src/scripts/reveal-plugins/math-gc.js')
     },
     mjxNodeConfigs: {
      svg: true ,
      linebreaks: false,
      useFontCache: true, // use <defs> and <use> in svg output?
-      useGlobalCache: false, // use common <defs> for all equations?
+      useGlobalCache: true, // use common <defs> for all equations?
     }
   })
 )

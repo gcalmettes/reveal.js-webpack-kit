@@ -43,4 +43,4 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
       }); // TEX.parse.argument
     }); // Mathjax.hub.register
 
-MathJax.Ajax.loadComplete("/Users/Gui/Git/revealjs-webpack-sauce/src/scripts/reveal-plugins/math-gc.js");
+MathJax.Ajax.loadComplete("<!-- path-to-math-gc.js -->");
