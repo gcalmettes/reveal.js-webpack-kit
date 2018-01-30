@@ -8,7 +8,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const GoogleFontsPlugin = require("google-fonts-webpack-plugin")
 
-const gchelpers =  require('./src/scripts/helpers.js')
+const gchelpers =  require('./src/_scripts/_modules/helpers.js')
 
 /* ENVIRONMENT CONFIG */
 const configEnv = {
@@ -53,7 +53,7 @@ console.log(configEnv.MESSAGES_HASH[process.env.NODE_ENV])
 const config = {
   context: path.join(__dirname, 'src'),
   entry: {
-    app: './scripts/main.js'
+    app: './_scripts/main.js'
   },
   output: {
     path: path.join(__dirname, 'build'),
@@ -72,6 +72,12 @@ const config = {
   devServer: {
     contentBase: path.join(__dirname, "build/"),
     port: 9000
+  },
+  resolve: {
+    alias: {
+      nodePath: path.join(__dirname, 'node_modules'),
+      stylesPath: path.join(__dirname, 'src/_styles')
+    }
   },
   plugins: [
     /* HtmlWebpackPlugin instances (one per html files found in './src/') */
@@ -92,7 +98,7 @@ const config = {
       // styles for slides export to to pdf
       { from: { glob: '../node_modules/reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
       // modified styles for menu.js plugin (compatible with inline svg)
-      { from: 'styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
+      { from: '_styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
       // any files in content
       { context: 'content',
         from: '**/*',
@@ -164,6 +170,7 @@ const config = {
       FONTS_DONWLOAD: configEnv.FONTS_DONWLOAD,
       FONTAWESOME_ENGINE:JSON.stringify(configEnv.FONTAWESOME_ENGINE),
       FONTAWESOME_CDN: JSON.stringify(configEnv.FONTAWESOME_CDN),
+      FONTAWESOME_DOWNLOAD: configEnv.FONTAWESOME_DOWNLOAD,
       PRODUCTION: configEnv.PRODUCTION,
       FOR_WEB: configEnv.FOR_WEB,
       SERVER_RENDERING: configEnv.SERVER_RENDERING
