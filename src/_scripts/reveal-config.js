@@ -5,7 +5,7 @@
 /* Register only the selected languages (defined in webpack.config.js) 
    in highlight.js and initialize highlight.js when Reveal itself initialize
    (see intialization step at the end of Reveal.initialize) */
-import hljs from './../../node_modules/highlight.js/lib/highlight.js';
+import hljs from 'nodePath/highlight.js/lib/highlight.js';
 Object.keys(HIGHLIGHT_LANGUAGES).forEach(key => {
   let languageName = HIGHLIGHT_LANGUAGES[key]
   // Using require() here because import() support hasn't landed in Webpack yet

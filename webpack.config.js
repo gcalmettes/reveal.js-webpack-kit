@@ -26,7 +26,7 @@ const configEnv = {
       down the slide transitions.
       - CDN: "cdn_url" (if webfont with CSS, which cdn to use)
       - DOWNLOAD: true/false. (if true, will download and link to local install)*/
-  FONTAWESOME_ENGINE: 'css',
+  FONTAWESOME_ENGINE: 'svg',
   FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.6/css/all.css",
   FONTAWESOME_DOWNLOAD: false,
   /* Generate a bundle size analysis? Only works if not in dev-mode since it will generate
