@@ -1,7 +1,6 @@
 // Global Reveal js style
 @import "../../node_modules/reveal.js/css/reveal.scss";
 // For code syntax highlighting
-// @import "../../node_modules/reveal.js/lib/css/zenburn.css";
 @import "../../node_modules/highlight.js/styles/atom-one-dark.css";
 
 
@@ -13,13 +12,3 @@
 
 // animate.css
 @import "../../node_modules/animate.css/animate.min.css";
-
-
-
-// .reveal .slides section .fragment.highlight-red-gc {
-//   opacity: 1;
-//   visibility: inherit; }
-
-// .reveal .slides section .fragment.highlight-red-gc.visible {
-//   color: #d9534f;
-// }

@@ -4,10 +4,11 @@
 
 import hljs from './../../node_modules/highlight.js/lib/highlight.js';
 // import only selected languages (defined in webpack.config.js)
-HIGHLIGHT_LANGUAGES.forEach((langName) => {
+Object.keys(HIGHLIGHT_LANGUAGES).forEach(key => {
+  let languageName = HIGHLIGHT_LANGUAGES[key]
   // Using require() here because import() support hasn't landed in Webpack yet
-  const langModule = require(`highlight.js/lib/languages/${langName}`);
-  hljs.registerLanguage(langName, langModule);
+  const languageModule = require(`highlight.js/lib/languages/${languageName}`);
+  hljs.registerLanguage(languageName, languageModule);
 });
 
 const addFontAwesome = (FOR_WEB) ? () => {
@@ -15,7 +16,7 @@ const addFontAwesome = (FOR_WEB) ? () => {
       const head = document.querySelector( 'head' );
       const resource = document.createElement( 'link' );
       resource.rel = 'stylesheet';
-      resource.href = "https://use.fontawesome.com/releases/v5.0.6/css/all.css";
+      resource.href = FONTAWESOME_CDN;
       head.appendChild( resource );
     })()
   } : () => false
