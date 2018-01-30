@@ -7,8 +7,10 @@ import './reveal-dependencies-config.js' // need config before importing plugins
 import './reveal-dependencies.js'
 import './reveal-config.js';
 
+console.log(FONTAWESOME_ENGINE)
+
 // Bundle Font Awesome svg with JS framework if not FOR_WEB
-const fontawesome = (!FOR_WEB) ? (() => {
+const fontawesome = (!FOR_WEB && FONTAWESOME_ENGINE=='svg') ? (() => {
 	// Adds all the icons from the Solid, Regular and Brands style into our library for easy lookup
 	const fa = require('./../../node_modules/@fortawesome/fontawesome').default;
 	const solid = require('./../../node_modules/@fortawesome/fontawesome-free-solid').default;
