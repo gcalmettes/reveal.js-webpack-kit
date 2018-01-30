@@ -12,16 +12,33 @@ const gchelpers =  require('./src/scripts/helpers.js')
 
 /* ENVIRONMENT CONFIG */
 const configEnv = {
-  HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],//'xml javascript python bash',
+  /* Languages to be supported by syntax highlighting in Reveal 
+     (the more fonts, the heavier the bundle will be) */
+  HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
+  /* Need fonts to be downloaded by the Google Font plugin?
+     If false, use the already generated CSS from previous build.
+     If true, need an internet connection */
+  FONTS_DONWLOAD: false,
+  /* Font Awesome config !
+      - ENGINE: svg/css (which framework to use, svg with js or css with webfonts)
+      the svg framework is all js and will be included in the final bundle. It provides
+      the latest FA perks, like possibility of icon layering and masking, but can slow
+      down the slide transitions.
+      - CDN: "cdn_url" (if webfont with CSS, which cdn to use)
+      - DOWNLOAD: true/false. (if true, will download and link to local install)*/
+  FONTAWESOME_ENGINE: 'css',
+  FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.6/css/all.css",
+  FONTAWESOME_DOWNLOAD: false,
+  /* Generate a bundle size analysis? Only works if not in dev-mode since it will generate
+     a live graph on a local server */
+  BUNDLE_ANALYSIS: false,
+
+  // internal stuffs, not configurations per se
   DEV: (process.env.NODE_ENV === "dev-server") ? true : false,
   PRODUCTION: (process.env.NODE_ENV === "production") ? true : false,
   FOR_WEB: (process.env.NODE_ENV === "production-web") ? true : false,
   SERVER_RENDERING: (process.env.NODE_ENV === "production-server-rendering") ? true : false,
   UGLIFY: (process.env.NODE_ENV === "production-web") ? false : true,
-  FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.6/css/all.css",
-  FONTAWESOME_DOWNLOAD: true,
-  FONTS_DONWLOAD: false, // Need an internet connection. see below in plugins
-  BUNDLE_ANALYSIS: false,
   MESSAGES_HASH: {
     "production": `Production!!!!! Minification: ${(process.env.NODE_ENV === "production-web") ? false : true}.`,
     "production-web": `Production FOR WEB!!!!! Linking FA and Mathjax to web ressources. Minification: ${(process.env.NODE_ENV === "production-web") ? false : true}.`,
@@ -111,6 +128,27 @@ const config = {
           assets: ['lib/css/fonts-all.css'],
           append: true 
     }),
+    /* !!!! FONTS AWESOME !!!!
+       If FOR_WEB, or (FONTAWESOME_ENGINE=='css' && FONTAWESOME_DOWNLOAD==false) just link
+       to the FA CDN */
+    (configEnv.FOR_WEB || (configEnv.FONTAWESOME_ENGINE=='css' && !configEnv.FONTAWESOME_DOWNLOAD)) ?
+      new HtmlWebpackIncludeAssetsPlugin({
+          assets: [configEnv.FONTAWESOME_CDN],
+          append: true 
+      }) : (configEnv.FONTAWESOME_ENGINE=='css' && configEnv.FONTAWESOME_DOWNLOAD) ? 
+        gchelpers.DummyPlugin() : gchelpers.DummyPlugin(),
+
+// const addFontAwesome = (FOR_WEB || FONTAWESOME_ENGINE == 'css') ? () => {
+//     (function loadStylesheet() {
+//       const head = document.querySelector( 'head' );
+//       const resource = document.createElement( 'link' );
+//       resource.rel = 'stylesheet';
+//       resource.href = FONTAWESOME_CDN;
+//       head.appendChild( resource );
+//     })()
+//   } : () => false
+
+
     // /* Download FA webfonts if needed */
     // (configEnv.FONTAWESOME_DOWNLOAD) ? 
     //   new CopyWebpackPlugin([
@@ -123,11 +161,12 @@ const config = {
     /* Define global variables to be accessed during webpack processing */
     new webpack.DefinePlugin({
       HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, configEnv.HIGHLIGHT_LANGUAGES)),
+      FONTS_DONWLOAD: configEnv.FONTS_DONWLOAD,
+      FONTAWESOME_ENGINE:JSON.stringify(configEnv.FONTAWESOME_ENGINE),
+      FONTAWESOME_CDN: JSON.stringify(configEnv.FONTAWESOME_CDN),
       PRODUCTION: configEnv.PRODUCTION,
       FOR_WEB: configEnv.FOR_WEB,
-      SERVER_RENDERING: configEnv.SERVER_RENDERING,
-      FONTAWESOME_CDN: JSON.stringify(configEnv.FONTAWESOME_CDN),
-      FONTS_DONWLOAD: configEnv.FONTS_DONWLOAD
+      SERVER_RENDERING: configEnv.SERVER_RENDERING
     }),
     /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
     new webpack.ContextReplacementPlugin(
