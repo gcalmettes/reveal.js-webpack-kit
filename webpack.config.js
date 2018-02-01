@@ -18,9 +18,10 @@ const configEnv = {
      (the more fonts, the heavier the bundle will be) */
   HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
   /* Need fonts to be downloaded by the Google Font plugin?
+     By default, will check if the generated css exists to know if needed.
      If false, use the already generated CSS from previous build.
      If true, need an internet connection */
-  FONTS_DONWLOAD: false,
+  FONTS_DONWLOAD: (process.env.NODE_ENV === "production-web") ? false : fs.exists('./build/lib/css/fonts-all.css', exists => exists) ? false : true,
   /* Font Awesome config !
       - ENGINE: svg/css (which framework to use, svg with js or css with webfonts)
       the svg framework is all js and will be included in the final bundle. It provides
@@ -40,7 +41,7 @@ const configEnv = {
   PRODUCTION: (process.env.NODE_ENV === "production") ? true : false,
   FOR_WEB: (process.env.NODE_ENV === "production-web") ? true : false,
   SERVER_RENDERING: (process.env.NODE_ENV === "production-server-rendering") ? true : false,
-  UGLIFY: false,//(process.env.NODE_ENV === "dev-server") ? false : true,
+  UGLIFY: (process.env.NODE_ENV === "dev-server") ? false : true,
   MESSAGES_HASH: {
     "production": `Production!!!!! Minification: ${(process.env.NODE_ENV === "dev-server") ? false : true}.`,
     "dev-server": `Enjoy the hot reloading dude!!!!! Minification: ${(process.env.NODE_ENV === "dev-server") ? false : true}.`,
