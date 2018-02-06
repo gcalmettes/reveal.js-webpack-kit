@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const mjpage = require('mathjax-node-page/lib/main.js').mjpage
 
-function HthmlMxPlugin(options) {
+function HtmlMxPlugin(options) {
   // Default options
   config = options || {pageConfigs: {}, mjxNodeConfigs: {}}
 
@@ -24,7 +24,7 @@ function HthmlMxPlugin(options) {
   }
 }
 
-HthmlMxPlugin.prototype.apply = function(compiler) {
+HtmlMxPlugin.prototype.apply = function(compiler) {
 	const  self = this;
 
   compiler.plugin('compilation', function(compilation) {
@@ -45,7 +45,7 @@ HthmlMxPlugin.prototype.apply = function(compiler) {
 };
 
 
-HthmlMxPlugin.prototype.convertToSvg = function (input, callback) {
+HtmlMxPlugin.prototype.convertToSvg = function (input, callback) {
   const  self = this;
 
   return new Promise((resolve, reject) => {
@@ -56,4 +56,4 @@ HthmlMxPlugin.prototype.convertToSvg = function (input, callback) {
 };
 
 
-module.exports = HthmlMxPlugin;
+module.exports = HtmlMxPlugin;

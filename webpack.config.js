@@ -11,6 +11,10 @@ const GoogleFontsPlugin = require("google-fonts-webpack-plugin")
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
 
 
+// const testFA = require('./src/_scripts/_modules/fontAwesomeIcons.js')
+
+// console.log(testFA.getFontAwesomeImportsFromFile(__dirname + '/src/demo.html'))
+
 
 /* ENVIRONMENT CONFIG */
 const configEnv = {

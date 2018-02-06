@@ -1,80 +1,125 @@
-fs = require('fs')
+const fs = require('fs')
 
-const data = `<section class="title-slide" >
-  <div class="huge framed bordered font-passionone col-80 border-3x bg-warning-alpha-08">
-    <bspan>Reveal.js</bspan><br>
-      <bspan class="right-30">+ Webpack</bspan> 
-  </div>
-  <div class="down-3">
-    <i class="fas fa-bomb fa-2x"></i>
-      Lots of goodies in one place
-  </div>
-</section>
-`
+const range = (start, end) => (
+  Array.from(Array(end - start + 1).keys()).map(i => i + start)
+);
 
-const regex = /(fa\-[a-z0-9\-]+)/g;
 
-const data2 = "foo fa-something-abc"
+const ATTRIBUTES_WATCHED_FOR_MUTATION = [
+	'class', 'data-prefix', 'data-icon', 
+	'data-fa-transform', 'data-fa-mask'
+];
 
-console.log(data.match(regex))
-console.log(data2.match(regex))
+const RESERVED_CLASSES = [
+		'xs', 'sm', 'lg', 'fw', 'ul', 'li', 'border', 'pull-left', 'pull-right', 'spin', 
+		'pulse', 'rotate-90', 'rotate-180', 'rotate-270', 'flip-horizontal', 'flip-vertical', 
+		'stack', 'stack-1x', 'stack-2x', 'inverse', 'layers', 'layers-text', 'layers-counter'
+	].concat(range(1, 10).map(function (n) {
+  	return n + 'x';
+	})).concat(range(1, 20).map(function (n) {
+  	return 'w-' + n;
+}));
 
-// const getAllIconsIn = (file) => {
-//   const fileData = fs.readFileSync(file, 'utf8').toString()
-//   return fileData.match(/var (fa[a-zA-Z0-9\-]+)/g).map(match => match.split(' ')[1])
+const iconStyles = {
+	'fas': 'solid',
+	'far': 'regular',
+	'fab': 'brands'
+}
+
+
+const isReserved = (name) => {
+  return ~RESERVED_CLASSES.indexOf(name);
+}
+
+
+const getIconName = (familyPrefix, cls) => {
+  const parts = cls.split('-');
+  const prefix = parts[0];
+  const iconName = parts.slice(1).join('-');
+
+  if (prefix==familyPrefix && iconName !== '' && !isReserved(iconName)) {
+    return iconName;
+  } else {
+    return null;
+  }
+}
+
+const emptyCanonicalIcon = () => {
+  return { prefix: null, iconName: null, iconCategory: null, rest: [] };
+};
+
+const getCanonicalIcon = (values, styles, defaultPrefix = "fas") => {
+  return values.reduce((acc, cls) => {
+    const iconName = getIconName('fa', cls);
+
+    if (styles[cls]) {
+      acc.prefix = cls;
+      acc.iconCategory = styles[cls]
+    } else if (iconName) {
+      acc.iconName = iconName;
+      acc.prefix = acc.prefix || defaultPrefix;
+      acc.iconCategory = acc.iconCategory || styles[defaultPrefix];
+    } else if (cls !== 'svg-inline--fa' && cls.indexOf('fa-w-') !== 0) {
+      acc.rest.push(cls);
+    }
+    return acc;
+  }, emptyCanonicalIcon());
+}
+
+// const getIcons = (file, tags = ATTRIBUTES_WATCHED_FOR_MUTATION) => {
+// 	const data = fs.readFileSync(file, 'utf8').toString()
+
+// 	let allClasses = []
+// 	tags.forEach(attr => {
+// 		[`'`, `"`].forEach(quote => {
+// 			let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r][^=]*fa-[a-z0-9\-]+|fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
+// 			let matchArray
+//   		while (matchArray = regex.exec(data)) {
+//     		allClasses.push(matchArray[1])
+//   		}
+// 		})
+// 	})
+
+// 	return allClasses
+// 					.map(d => d.split(' '))
+// 					.map(d => {
+// 	 					return getCanonicalIcon(d, iconStyles)
+// 					})
 // }
 
-// const countOccurrences = (regex, str) => {
-//   if (! regex.global) {
-//       throw new Error('Please set flag /g of regex');
-//   }
-//   const origLastIndex = regex.lastIndex;  // store
-//   regex.lastIndex = 0;
+const getIcons = function(file, tags = ATTRIBUTES_WATCHED_FOR_MUTATION, inHTML = true) {
+  const data = fs.readFileSync(file, 'utf8')
 
-//   let count = 0;
-//   while (regex.test(str)) count++;
+  let allClasses = []
+  if (inHTML) {
+    tags.forEach(attr => {
+      [`'`, `"`].forEach(quote => {
+        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r][^=]*fa-[a-z0-9\-]+|fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
+        let matchArray
+        while (matchArray = regex.exec(data)) {
+          allClasses.push(matchArray[1])
+        }
+      })
+    })
+    allClasses = allClasses.map(d => d.split(' '))
+  } else {
+    const regex = /(fa\-[a-z0-9\-]+)/g;
+    data.match(regex).forEach(
+    	faElement => allClasses.push([faElement])
+    )
+  }
 
-//   regex.lastIndex = origLastIndex;  // restore
-//   return count;
-// }
-
-
-// const getIconsObject = (input, regex) => {
-// 	const groups = {}
-
-// 	let matchArray;
-// 	while (matchArray = regex.exec(input)) {
-// 		groups[matchArray[2]] = matchArray[1]
-// 	}
-// 	return groups
-// }
-
-// const getAllIconsInFile = (file) => {
-//   const fileData = fs.readFileSync(file, 'utf8').toString()
-//   const regex = /var (fa[a-zA-Z0-9\-]+) = { prefix: 'fab', iconName: '([a-zA-Z0-9\-]+)',/g
-  
-//   return getIconsObject(fileData, regex)
-// }
+  return allClasses
+          .map(d => getCanonicalIcon(d, iconStyles))
+          .filter(icon => icon.iconName)
+}
 
 
-// // const getAllIconsInFile = (file) => {
-// //   const fileData = fs.readFileSync(file, 'utf8').toString()
 
-// //   const regex = /var (fa[a-zA-Z0-9\-]+) = { prefix: 'fab', iconName: ('[a-zA-Z0-9\-]+'),/g
-// //   const nMatches = countOccurrences(regex, fileData)
-// //   console.log(nMatches)
-// //   return regex.exec(fileData)//fileData.match(regex)
-// // }
+// const icons = getIcons('src/demo.html')
+const icons = getIcons('node_modules/reveal.js-menu/menu.js', ATTRIBUTES_WATCHED_FOR_MUTATION, false)
 
-// const matches = getAllIconsInFile('node_modules/@fortawesome/fontawesome-free-brands/shakable.es.js')
 
-// console.log(matches)
-// console.log(matches['xing'])
+console.log(icons)
 
-// // const fileData = fs.readFileSync('node_modules/@fortawesome/fontawesome-free-brands/shakable.es.js', 'utf8').toString()
-// // const regex = /var (fa[a-zA-Z0-9\-]+) = { prefix: 'fab', iconName: ('[a-zA-Z0-9\-]+'),/
-// // // const match = 
-// // const [_, iconFileName, iconName] = regex.exec(fileData)
-
-// // console.log(iconFileName, iconName)
 

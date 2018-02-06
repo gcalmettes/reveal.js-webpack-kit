@@ -3,6 +3,9 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const mkdirp = require('mkdirp');
+
+const FAtools = require('./fontAwesomeIcons.js')
+ 
 // var getDirName = require('path').dirname;
 
 const writeFileSync = (filePath, contents) => {
@@ -11,55 +14,6 @@ const writeFileSync = (filePath, contents) => {
     fs.writeFileSync(filePath, contents);
   });
 }
-
-
-/* EXTRACT FONT AWESOME ICONS USED IN FILE */
-
-const getIconIDs = (input, regex, category) => {
-  const groups = {}
-
-  let matchArray;
-  while (matchArray = regex.exec(input)) {
-    groups[`fa-${matchArray[2]}`] = {iconFileName: matchArray[1], iconCategory: category}
-  }
-  return groups
-}
-
-const getAllIconsInFASourceFile = (file, category) => {
-  const fileData = fs.readFileSync(file, 'utf8').toString()
-  const regex = /var (fa[a-zA-Z0-9\-]+) = { prefix: '[a-z]+', iconName: '([a-zA-Z0-9\-]+)',/g
-  
-  return getIconIDs(fileData, regex, category)
-}
-
-function mergeObjects(...args) {
-  return Object.assign({}, ...args);
-}
-
-const getAllFontAwesomeIconNames = (categories) => {
-  return mergeObjects(...categories.map(category => getAllIconsInFASourceFile(__dirname + `/../../../node_modules/@fortawesome/fontawesome-free-${category}/shakable.es.js`, category)))
-}
-
-const getAllIconsInHtmlFile = (filePath, iconList = getAllFontAwesomeIconNames(['regular', 'brands', 'solid'])) => {
-  const regex = /(fa\-[a-z0-9\-]+)/g;
-  let fileData = fs.readFileSync(path.join(__dirname, `/../../${filePath}`), 'utf8').toString()
-  const iconsInFile = fileData.match(regex)
-  return (iconsInFile) ? [...new Set(iconsInFile.map(icon => iconList[icon]).filter(icon => icon))] : []
-}
-
-
-exports.getFontAwesomeIconsUsed = function (htmlFiles, iconList = getAllFontAwesomeIconNames(['brands', 'solid', 'regular'])) {
-  const regex = /(fa\-[a-z0-9\-]+)/g;
-  
-  const allIconsUsed = Object.keys(htmlFiles).map(name => {
-    let fileData = fs.readFileSync(path.join(__dirname, `/../../${htmlFiles[name]}`), 'utf8').toString()
-    return {file: `${name}`, icons: [...new Set(fileData.match(regex).map(icon => faIcons[icon]).filter(icon => icon))]}
-  })
-  
-  return allIconsUsed
-}
-
-
 
 
 // List all the html files to use as entries
@@ -78,24 +32,18 @@ exports.getEntries = function(path) {
 }
 
 
-const generateFontAwesomeImportsText = (icons) => {
-  let iconsImportsText = "import fontawesome from 'nodePath/@fortawesome/fontawesome'"
+// Get all files imported with data_external plugin
+const getExternalFilesInFile = function (file) {
+  const regex = /data-external[\s+]?=[\s+]?"(.*)"|data-external[\s+]?=[\s+]?'(.*)'/g
+  const data = fs.readFileSync(file, 'utf8')
+  const allExternalFiles = []
+  // let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r][^=]*fa-[a-z0-9\-]+|fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
+  let matchArray
+  while (matchArray = regex.exec(data)) {
+    allExternalFiles.push(matchArray[1])
+  }
 
-  // const groupedIcons = icons.reduce(d => , {})
-  const categories = [... new Set(icons.map(d => d.iconCategory))]
-  const groupedIcons = categories.map(category => {
-    return {'category': category, 
-            'icons': icons.filter(icon => icon.iconCategory==category).map(ic => ic.iconFileName)}
-    })
-  groupedIcons.forEach(d => {
-    let categoryImport = `import {${`${[...d.icons]}`}} from 'nodePath/@fortawesome/fontawesome-free-${d.category}/shakable.es.js'`
-    iconsImportsText += `\n${categoryImport}`
-  })
-
-  iconsImportsText += `\nfontawesome.library.add(${[...icons.map(icon => icon.iconFileName)]})`
-  iconsImportsText += "\nfontawesome.config['searchPseudoElements'] = true"
-  
-  return iconsImportsText
+  return allExternalFiles
 }
 
 
@@ -108,9 +56,13 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
     Object.entries(htmlFiles).forEach(([name, path]) => {
       
       /* Generate the necessary imports with only the FA icons used in file */
-      const iconsInMenuPlugin = getAllIconsInHtmlFile('../node_modules/reveal.js-menu/menu.js')
-      const iconsInFile = getAllIconsInHtmlFile(path)
-      const importsText = generateFontAwesomeImportsText([...iconsInMenuPlugin, ...iconsInFile])
+      const iconsInMenuPlugin = FAtools.getIconsInFile(__dirname + '/../../../node_modules/reveal.js-menu/menu.js', htmlFile=false)
+      const iconsInFile = FAtools.getIconsInFile(__dirname + `/../../${path}`)
+      let externalFilesIcons = getExternalFilesInFile(__dirname + `/../../${path}`)
+        .map(file => FAtools.getIconsInFile(__dirname + `/../../${file}`))
+      externalFilesIcons = externalFilesIcons.length>0 ? externalFilesIcons.reduce((acc, val) => [...acc, ...val]) : []
+      
+      const importsText = FAtools.generateFontAwesomeImportsText([...iconsInMenuPlugin, ...iconsInFile, ...externalFilesIcons])
       const faFileName = `fa-${name.replace(/\s/g, '')}`
       const jsFilePath = `./_scripts/_generatedEntries/${faFileName}.js`
       writeFileSync(`./src/${jsFilePath}`, importsText)
@@ -151,19 +103,6 @@ exports.DummyPlugin = function () {
   doNothing.prototype.apply = () => {/*do nothing */}
   return new doNothing
 }
-
-
-/* FONT AWESOME utilities functions */
-// function concat(...args) {
-//   return args.reduce((acc, val) => [...acc, ...val]);
-// }
-
-
-
-
-
-// const htmlFiles = getEntries('./src/')
-// const iconsInFiles = getFontAwesomeIconsUsed(htmlFiles)
 
 
 
