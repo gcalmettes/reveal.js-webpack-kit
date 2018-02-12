@@ -49,7 +49,7 @@ const RevealMath = window.RevealMath || (function(){
           const index = this.GetArgument(name);
           const arg   = this.ParseArg(name);
           this.Push(arg.With({
-            'class': 'fragment',
+            'class': 'fragment fragment-mjx',
             attrNames: ['data-fragment-index'],
             attr: {'data-fragment-index':index}
           }));
@@ -60,13 +60,13 @@ const RevealMath = window.RevealMath || (function(){
           const arg   = this.ParseArg(name);
           if (index) {
             this.Push(arg.With({
-              'class': 'fragapply fragment ' + apply_kind,
+              'class': 'fragapply fragment fragment-mjx ' + apply_kind,
               attrNames: ['data-fragment-index'],
               attr: {'data-fragment-index':index}
             }));
           } else {
             this.Push(arg.With({
-              'class': 'fragapply fragment ' + apply_kind
+              'class': 'fragapply fragment fragment-mjx ' + apply_kind
             }));
           }
         },
@@ -88,7 +88,7 @@ const RevealMath = window.RevealMath || (function(){
 
       // clean up false fragment created during Mathjax process
       const slide = event.currentSlide
-      let slideFragments = Array.prototype.slice.call(slide.querySelectorAll( '.fragment' ))
+      let slideFragments = Array.prototype.slice.call(slide.querySelectorAll( '.fragment-mjx' ))
       slideFragments = slideFragments.filter(d => d.nodeName !== "SPAN")
       for (let i=0; i<slideFragments.length; i++){
         slideFragments[i].classList.remove("fragment");
