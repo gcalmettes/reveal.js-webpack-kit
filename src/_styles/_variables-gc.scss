@@ -1,7 +1,7 @@
 
 // COLORS
 
-$backgroundColor: #fcf8e3;//#EEF0E8;
+$backgroundColor: #eee;//#fcf8e3;//#EEF0E8;
 $mainColor: #222;
 $headingColor: #222;
 $contentBoxColor: lighten($mainColor, 50%);
@@ -14,10 +14,11 @@ $linkColorHover: lighten( $linkColor, 15% );
 $selectionBackgroundColor: lighten( $linkColor, 25% );
 
 $muted: #B4B4B4;
-$info: #77ABDA;
+$info: #00BFFF;//#77ABDA;
 $warning: #FBC15E;
-$danger: #F3635F;
-$success: #5AAA82;
+$danger: #fb4c52;//#F3635F;
+$success: #9fc857;//#5AAA82;
+$bright: #6ae2d0;
 $pop: #F267F1;
 
 
