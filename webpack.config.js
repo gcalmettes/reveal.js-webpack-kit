@@ -61,6 +61,11 @@ console.log(configEnv.MESSAGES_HASH[process.env.NODE_ENV])
 const htmlList = gchelpers.getEntries('./src/')
 const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, !(configEnv.FOR_WEB || configEnv.FONTAWESOME_ENGINE=='css'))
 
+// // Create multiple instances of ExtractTextPlugin to separate FA if needed
+// const extractFA = new ExtractTextPlugin({filename:'lib/css/font-awesome.bundle.css'});
+// const extractLib = new ExtractTextPlugin({filename:'lib/css/presentation.bundle.css'});
+
+
 /* WEBPACK CONFIG ITSELF */
 const config = {
   context: path.join(__dirname, 'src'),
@@ -83,26 +88,45 @@ const config = {
              'sass-loader']
         })
       },
-      // { test: /(eot|woff|woff2|ttf|svg)(\?\S*)?$/,
-      //   use: [
-      //     {
-      //       loader: 'file-loader',
-      //       options: {
-      //         name: 'fontawesome-fonts.[ext]',
-      //         publicPath: './../../',
-      //         outputPath: 'lib/webfonts/',
-      //         emitFile: true
-      //       }  
-      //     }
-      //   ]
+      // { test:/\.(s*)css$/,
+      //   include: path.join(__dirname, 'src/_styles'),
+      //   use: extractLib.extract({
+      //     fallback:'style-loader',
+      //     use:[
+      //       { loader: 'css-loader',
+      //         options: {
+      //           minimize: true
+      //         }
+      //       },
+      //        'sass-loader']
+      //   })
       // },
-      // { test: /(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-      //   use: 'file-loader'
+      // { test:/\.(s*)css$/,
+      //   include: path.join(__dirname, 'node_modules/@@fortawesome/fontawesome-free-webfonts/scss'),
+      //   use: extractFA.extract({
+      //     fallback:'style-loader',
+      //     use:[
+      //       { loader: 'css-loader',
+      //         options: {
+      //           minimize: true
+      //         }
+      //       },
+      //        'sass-loader']
+      //   })
       // },
-      // {
-      //   test: /.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
-      //   loader: 'url-loader?limit=10000',
-      // },
+      { test: /(eot|woff|woff2|ttf|svg)(\?\S*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fontawesome-fonts.[ext]',
+              publicPath: './../../',
+              outputPath: 'lib/webfonts/',
+              emitFile: true
+            }  
+          }
+        ]
+      },
       // { test: /\.js$/,
       //   use: ['webpack-conditional-loader']
       // }
@@ -191,6 +215,7 @@ const config = {
           assets: [configEnv.FONTAWESOME_CDN],
           append: true 
       }) : gchelpers.DummyPlugin(),
+
     (!configEnv.FOR_WEB && configEnv.FONTAWESOME_ENGINE=='css' && configEnv.FONTAWESOME_USE_LOCAL) ?
       new CopyWebpackPlugin([
       // FA CSS with webfonts files
@@ -208,10 +233,13 @@ const config = {
           assets: ['lib/css/fontawesome.css', 'lib/css/fa-solid.css', 'lib/css/fa-regular.css', 'lib/css/fa-brands.css'],
           append: true 
       }) : gchelpers.DummyPlugin(),
-    /* Generate styles file from (scss + css) */
+    /* Generate styles file from (scss + css) for the main lib */
     new ExtractTextPlugin(
       {filename:'lib/css/presentation.bundle.css'}
     ),
+    // extractLib,
+    // (!configEnv.FOR_WEB && configEnv.FONTAWESOME_ENGINE=='css' && configEnv.FONTAWESOME_USE_LOCAL) ?
+    //   extractFA : gchelpers.DummyPlugin(),
     /* Define global variables to be accessed during webpack processing */
     new webpack.DefinePlugin({
       HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, configEnv.HIGHLIGHT_LANGUAGES)),

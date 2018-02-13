@@ -146,7 +146,10 @@ exports.getIconsInFile = function(file, htmlFile = true, tags = ATTRIBUTES_WATCH
 exports.generateFontAwesomeImportsText = function(icons) {
   let iconsImportsText = "import fontawesome from 'nodePath/@fortawesome/fontawesome'"
 
-  // const groupedIcons = icons.reduce(d => , {})
+  // ensure quoteLeft and quoteRight will be imported as they are needed for "quoted" class
+  const quoteIcons = ['faQuoteLeft', 'faQuoteRight']
+  quoteIcons.forEach(d => icons.push({iconCategory: 'solid', iconFileName: d}))
+  
   const categories = [... new Set(icons.map(d => d.iconCategory))]
   const groupedIcons = categories.map(category => {
     return {'category': category, 

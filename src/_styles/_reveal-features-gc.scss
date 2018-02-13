@@ -198,7 +198,8 @@ section {
 	& .sided {
 		  border-left: $borderSidedThickness solid lighten($borderColor, 50%);
   		background-color: lighten($borderColor, 80%);
-	}
+  }
+  // if Font Awesome with SVG
 	& .quoted {
   		background-color: lighten($borderColor, 80%);
   		font-style: italic;
@@ -215,7 +216,25 @@ section {
   			font-family: 'Font Awesome 5 Solid';
   			padding-left: 0.2em;
 			}
-	}
+  }
+  // // if font awesome with CSS
+  // & .quoted {
+  //   background-color: lighten($borderColor, 80%);
+  //   font-style: italic;
+  //   &:before {
+  //     content: "\f10d";
+  //     color: lighten($borderColor, 50%);
+  //     font-family: "Font Awesome 5 Free";
+  //   }
+  //   &:after {
+  //     position: relative;
+  //     top: 0.3em;
+  //     content: "\f10e";
+  //     color: lighten($borderColor, 50%);
+  //     font-family: 'Font Awesome 5 Free';
+  //     padding-left: 0.2em;
+  //   }
+  // }
 }
 
 // hack to style Font Awesome in quoted element
@@ -409,4 +428,100 @@ section .fragment.fragapply:not(.visible) {
 //   opacity: 1;
 //   visibility: inherit;
 // }
+
+
+/*********************************************
+* FRAGMENT HIGHLIGHT
+*********************************************/
+
+
+@each $name, $color in $colorsList {
+
+  .reveal .slides section .fragment {
+    &.highlight-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        color: $color;
+      }
+    }
+    &.highlight-current-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        color: $color;
+      }
+    }
+    &.highlight-bg-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        // @if $color == $lightGrey or $color == $offWhite {
+        //   color: $bgMainColor;
+        // }
+        background-color: $color;
+      }
+    }
+    &.highlight-current-bg-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        // @if $color == $lightGrey or $color == $offWhite {
+        //   color: $bgMainColor;
+        // }
+        background-color: $color;
+      }
+    }
+    &.underline-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        text-decoration: underline $color;
+        -webkit-text-decoration: underline $color;
+      }
+    }
+    &.underline-current-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        text-decoration: underline $color;
+        -webkit-text-decoration: underline $color;
+
+      }
+    }
+    &.strike-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        text-decoration: line-through $color;
+        -webkit-text-decoration: line-through $color;
+      }
+    }
+    &.strike-current-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        text-decoration: line-through $color;
+        -webkit-text-decoration: line-through $color;
+        
+      }
+    }
+    &.wavy-strike-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        text-decoration: line-through wavy $color;
+        -webkit-text-decoration: linethrough wavy $color;
+      }
+    }
+    &.wavy-strike-current-#{$name} {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        text-decoration: line-through wavy $color;
+        -webkit-text-decoration: line-through wavy $color;
+      }
+    }
+  } 
+}
 
