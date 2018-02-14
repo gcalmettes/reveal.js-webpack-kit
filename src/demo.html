@@ -445,14 +445,33 @@
 
 <section>
   <h2>Fragments fun</h2>
-
-  <ul>
-    <li>Normal text</li>
-    <li class="fragment highlight-danger">.fragment.highlight-danger</li>
-    <li class="fragment highlight-current-danger">.fragment.highlight-current-danger</li>
-    <li class="fragment highlight-bg-danger">.fragment.highlight-bg-danger</li>
-    <li class="fragment highlight-current-bg-danger">.fragment.highlight-current-bg-danger</li>
-  </ul>
+  <div class="smallest">
+    Emphasize text by using some special classes in fragments: <br>
+    <ul class="left normal">
+      <li><span class="tt">.highlight-[color]</span>: triggers definitive font color change</li>
+      <li><span class="tt">.highlight-current-[color]</span>: triggers temporary font color change</li>
+      <li><span class="tt">.highlight-bg-[color]</span>: triggers definitive background color change</li>
+      <li><span class="tt">.highlight-current-bg-[color]</span>: triggers temporary background color change</li>
+      <li><span class="tt">.highlight-bg-[color]-white</span>: triggers definitive background color change, with white font color</li>
+      <li><span class="tt">.highlight-current-bg-[color]-white</span>: triggers temporary background color change, with white font color</li>
+    </ul>
+  </div>
+  <div class="row small">
+    <div class="col-50">
+      <p class="tt fragment highlight-danger">.fragment .highlight-danger</p>
+      <p class="tt fragment highlight-current-info">.fragment. highlight-current-info</p>
+    </div>
+    <div class="col-50">
+      <p class="tt fragment highlight-bg-success">.fragment .highlight-bg-success</p>
+      <p class="tt fragment highlight-current-bg-warning">.fragment. highlight-current-bg-warning</p>
+    </div>
+  </div>
+  <div class="row small">
+    <div class="col-50">
+      <p class="tt fragment highlight-bg-pop-white">.fragment .highlight-bg-pop-white</p>
+      <p class="tt fragment highlight-current-bg-danger-white">.fragment. highlight-current-bg-danger-white</p>
+    </div>
+  </div>
 </section>
   
 

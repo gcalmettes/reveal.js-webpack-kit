@@ -456,9 +456,14 @@ section .fragment.fragapply:not(.visible) {
       opacity: 1;
       visibility: inherit;
       &.visible {
-        // @if $color == $lightGrey or $color == $offWhite {
-        //   color: $bgMainColor;
-        // }
+        background-color: $color;
+      }
+    }
+    &.highlight-bg-#{$name}-white {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        color: white;//$backgroundColor;
         background-color: $color;
       }
     }
@@ -466,9 +471,14 @@ section .fragment.fragapply:not(.visible) {
       opacity: 1;
       visibility: inherit;
       &.current-fragment {
-        // @if $color == $lightGrey or $color == $offWhite {
-        //   color: $bgMainColor;
-        // }
+        background-color: $color;
+      }
+    }
+    &.highlight-current-bg-#{$name}-white {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        color: white;//$backgroundColor;
         background-color: $color;
       }
     }
