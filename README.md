@@ -1,3 +1,5 @@
+** This is a work in progress - Lot of documentation missing and bugs to be fixed **
+
 Reveal.js Webpack build setup template
 ==================
 
