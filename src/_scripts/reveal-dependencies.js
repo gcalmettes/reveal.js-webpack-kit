@@ -17,7 +17,7 @@ import './reveal-plugins/math-gc.js'
 // Include animate.css animations
 import './reveal-plugins/reveal-animate-css.js'
 // Fragment numbering with "data-index"
-import './reveal-plugins/reveal-data-index.js'
+// import './reveal-plugins/reveal-data-index.js'
 // print slides as pdf if ?print-pdf is appended to the URL
 import './reveal-plugins/print-css.js'
 // Syntax highlighting for code

@@ -10,7 +10,7 @@ Reveal.configure(
 
   reveald3: {
       mapPath: 'content/',
-      tryFallbackURL: true
+      tryFallbackURL: true,
     },
 
     menu: {
