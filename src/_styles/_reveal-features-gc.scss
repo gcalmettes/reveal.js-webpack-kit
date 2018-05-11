@@ -86,6 +86,8 @@ hr {
 
 body section {
   & .rounded { 
+    padding-left: 10px;
+    padding-right: 10px;
     border-radius: $borderRadius;
   }
   & .bordered {
@@ -228,6 +230,7 @@ table.center tbody td,
 table.center tfoot th,
 table.center tfoot td{
   text-align: center;
+  vertical-align: middle;
 }
 
 
@@ -244,9 +247,9 @@ table.center tfoot td{
 section {
 	& .framed,
 		.boxed {
-  border: $borderThickness solid $borderColor;
-  padding-left: 10px;
-  padding-right: 10px;
+      border: $borderThickness solid $borderColor;
+      padding-left: 10px;
+      padding-right: 10px;
 	}
 	& .framed {
 		  border-radius: $borderRadius;
@@ -331,8 +334,11 @@ section {
 @each $name, $color in $colorsList {
 	// colors
 	.#{$name} {
-		color: $color;
+		color: $color !important;
 	}
+  .#{$name}-dark {
+    color: darken($color, 25%) !important;
+  }
 	// underline
 	.u-#{$name} {
 		text-decoration: underline;
@@ -387,7 +393,16 @@ section {
     text-align: center;
     width: 1.2em; 
   }
+
+  section {
+    & .sided-bg-#{$name} {
+      padding: 3px 10px 3px 10px;
+      border-left: $borderSidedThickness solid lighten($borderColor, 50%);
+      background-color: lighten($color, 30%);
+    }
+  }
 }
+
 
 // color inversion
 .inverted{
