@@ -605,6 +605,14 @@ section .fragment.fragapply:not(.visible) {
         background-color: $color;
       }
     }
+    &.highlight-current-bg-#{$name}-light {
+      opacity: 1;
+      visibility: inherit;
+      &.current-fragment {
+        background-color: lighten($color, 15%);
+        color: darken($color, 30%)
+      }
+    }
     &.underline-#{$name} {
       opacity: 1;
       visibility: inherit;
