@@ -33,7 +33,7 @@ const configEnv = {
       down the slide transitions.
       - CDN: "cdn_url" (if webfont with CSS, which cdn to use)
       - GETLOCAL: true/false. (Applies to CSS framework only. If true, will download if necessary and link to local install)*/
-  FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.6/css/all.css",
+  FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.13/css/all.css",
   FONTAWESOME_USE_LOCAL: true,
   /* Generate a bundle size analysis? Only works if not in dev-mode since it will generate
      a live graph on a local server */
