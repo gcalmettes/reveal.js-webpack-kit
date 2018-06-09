@@ -34,10 +34,13 @@ build/Release
 build/
 src/_scripts/_generatedEntries
 package-lock.json
+dist/
 
 # Dependency directories
 node_modules/
 jspm_packages/
+
+v3/
 
 # Typescript v1 declaration files
 typings/
