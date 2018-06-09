@@ -1,5 +1,7 @@
 ** This is a work in progress - Lot of documentation missing and bugs to be fixed **
 
+** I am currently rewriting this to use Webpack 4 and simplify using it **
+
 Reveal.js Webpack build setup template
 ==================
 
