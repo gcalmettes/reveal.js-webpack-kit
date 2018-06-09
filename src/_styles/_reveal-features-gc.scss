@@ -533,6 +533,16 @@ $angle: 5;
 }
 
 
+ol{
+  &.upperAlphaList {
+    list-style-type: upper-alpha;
+  }
+  &.lowerAlphaList {
+    list-style-type: lower-alpha;
+  }
+}
+
+
 
 /*********************************************
  * FRAGMENTS
@@ -588,6 +598,14 @@ section .fragment.fragapply:not(.visible) {
       &.visible {
         color: white;//$backgroundColor;
         background-color: $color;
+      }
+    }
+    &.highlight-bg-#{$name}-light {
+      opacity: 1;
+      visibility: inherit;
+      &.visible {
+        background-color: lighten($color, 15%);
+        color: darken($color, 30%)
       }
     }
     &.highlight-current-bg-#{$name} {

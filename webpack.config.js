@@ -25,7 +25,7 @@ const configEnv = {
      By default, will check if the generated css exists to know if needed.
      If false, use the already generated CSS from previous build.
      If true, need an internet connection */
-  FONTS_DONWLOAD: (process.env.NODE_ENV === "production-web") ? false : fs.exists('./build/lib/css/fonts-all.css', exists => exists) ? false : true,
+  FONTS_DONWLOAD: (process.env.NODE_ENV === "dev-server")? false : (process.env.NODE_ENV === "production-web") ? false : fs.exists('./build/lib/css/fonts-all.css', exists => exists) ? false : true,
   /* Font Awesome config !
       - ENGINE: svg/css (which framework to use, svg with js or css with webfonts)
       the svg framework is all js and will be included in the final bundle. It provides
@@ -40,7 +40,7 @@ const configEnv = {
   BUNDLE_ANALYSIS: false,
 
   // internal stuffs, not configurations per se
-  FONTAWESOME_ENGINE: process.env.FONT_AWESOME,
+  FONTAWESOME_ENGINE: 'css',//process.env.FONT_AWESOME,
   DEV: (process.env.NODE_ENV === "dev-server") ? true : false,
   PRODUCTION: (process.env.NODE_ENV === "production") ? true : false,
   FOR_WEB: (process.env.NODE_ENV === "production-web") ? true : false,
