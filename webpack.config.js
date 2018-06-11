@@ -10,6 +10,8 @@ const fs = require('fs')
 // const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const gchelpers =  require('./src/_scripts/_modules/helpers.js')
+
 // const delay = (duration) =>
 //   new Promise(resolve => setTimeout(resolve, duration));
 
@@ -23,7 +25,9 @@ async function getConfig() {
     /* Languages to be supported by syntax highlighting in Reveal 
      (the more fonts, the heavier the bundle will be) */
     HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
-    FONT_AWESOME_BACKEND: 'css', // 'css' or 'svg'
+    FONTAWESOME_BACKEND: 'css', // 'css' or 'svg' ... (svg option not yet implemented)
+    FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.13/css/all.css",
+    FONTAWESOME_USE_LOCAL: true
   
   }
   
@@ -31,7 +35,12 @@ async function getConfig() {
   // const FONTS_DONWLOAD = await fs.exists('./dist/lib/css/fonts-all.css', exists => exists)
   const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/fonts-all.css') ? false : true
 
+  const htmlList = await gchelpers.getEntries('./src/')
+  const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, !(userConfig.FONTAWESOME_BACKEND=='css'))
+  
+  console.log(htmlPluginList)
 
+  // console.log(htmlPluginList)
   // const env = process.env.NODE_ENV
   // const mode = process.env.WEBPACK_MODE
   // await delay(5000);
@@ -43,8 +52,8 @@ async function getConfig() {
 
 
   return {
-    // context: path.join(__dirname, 'src'),
-    entry: { main: './src/_scripts/index.js' },
+    // entry: { main: './src/_scripts/index.js' },
+    entry: entries,
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'lib/js/[name].js'
@@ -64,22 +73,6 @@ async function getConfig() {
         new OptimizeCSSAssetsPlugin({})
       ]
     },
-
-
-
-    
-    // optimization: {
-    //   splitChunks: {
-    //     cacheGroups: {
-    //       styles: {
-    //         name: 'styles',
-    //         test: /\.css$/,
-    //         chunks: 'all',
-    //         enforce: true
-    //       }
-    //     }
-    //   }
-    // },
 
     module: {
       rules: [
@@ -110,7 +103,7 @@ async function getConfig() {
           {
             loader: 'file-loader',
             options: {
-              name: 'fontawesome-fonts.[ext]',
+              name: '[name].[ext]',
               // publicPath: './../../',
               publicPath: '../webfonts/',
               outputPath: 'lib/webfonts/',
@@ -135,20 +128,17 @@ async function getConfig() {
     },
 
     plugins: [ 
-      new HtmlWebpackPlugin({
-        inject: true,
-        hash: false,
-        template: './src/index.html',
-        filename: 'index.html'
-      }),
-      // new HtmlWebpackIncludeAssetsPlugin({ 
-      //   assets: ['lib/css/[name].css'], append: true 
+      // new HtmlWebpackPlugin({
+      //   inject: true,
+      //   hash: false,
+      //   template: './src/index.html',
+      //   filename: 'index.html'
       // }),
+      ...htmlPluginList,
+
 
       new webpack.ProvidePlugin({
         Reveal: 'reveal.js',
-        // $: 'jquery',
-        // jQuery: 'jquery',
       }),
 
 
@@ -174,8 +164,8 @@ async function getConfig() {
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
-        FA_CSS: userConfig.FONT_AWESOME_BACKEND == 'css',
-        FA_SVG: userConfig.FONT_AWESOME_BACKEND == 'svg',
+        FA_CSS: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL,
+        FA_SVG: userConfig.FONTAWESOME_BACKEND == 'svg' && userConfig.FONTAWESOME_USE_LOCAL,
       }),
 
       /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
@@ -188,6 +178,17 @@ async function getConfig() {
         filename: 'lib/css/[name].css',
         // chunkFilename: "lib/css/[name].css"
       }),
+
+      /* !!!! FONTS AWESOME !!!!
+       If (FONTAWESOME_BACKEND=='css' && FONTAWESOME_USE_LOCAL==false) just link
+       to the FA CDN */
+    (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL) ?
+      new HtmlWebpackIncludeAssetsPlugin({
+          assets: [userConfig.FONTAWESOME_CDN],
+          append: true 
+      }) 
+      : gchelpers.DummyPlugin(),
+
 
       // new BundleAnalyzerPlugin()
     ]

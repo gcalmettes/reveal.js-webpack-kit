@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Slides</title>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+
+<section>
+	<h3>Title 1</h3>
+	<pre class="python"><code data-trim>
+            import numpy as np
+
+            M=0 # variable to store positive results
+
+            for i in range(10000):
+              # draw 28 numbers between 0 and 1
+              trial = np.random.rand(28)<0.5
+              # count how many heads we got
+              nHeads = np.sum(trial)
+              # if more than 19 heads, update M
+              if nHeads >= 19:
+                M += 1
+
+            p = M/10000 #0.0439
+          </code></pre>
+</section>
+
+<section data-external-replace="content/slides-external/slide-error-types.html"></section>
+
+<section>
+	<h3>Title 2</h3>
+</section>
+  
+
+</div> <!-- slides -->
+</div> <!-- reveal -->
+</html>
