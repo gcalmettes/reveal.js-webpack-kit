@@ -1,24 +1,43 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const fs = require('fs')
+// const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+// const delay = (duration) =>
+//   new Promise(resolve => setTimeout(resolve, duration));
 
 
 async function getConfig() {
 
 
-  // Configurable options
+  // Configurable options for the build
   const userConfig = {
-    HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash']
+
+    /* Languages to be supported by syntax highlighting in Reveal 
+     (the more fonts, the heavier the bundle will be) */
+    HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
+    FONT_AWESOME_BACKEND: 'css', // 'css' or 'svg'
+  
   }
   
   
+  // const FONTS_DONWLOAD = await fs.exists('./dist/lib/css/fonts-all.css', exists => exists)
+  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/fonts-all.css') ? false : true
+
+
+  // const env = process.env.NODE_ENV
+  // const mode = process.env.WEBPACK_MODE
+  // await delay(5000);
+  // console.log(__dirname)
+  // console.log(env, mode, devMode)
+  console.log('font download:', FONTS_DONWLOAD)
 
 
 
@@ -85,7 +104,21 @@ async function getConfig() {
             },
             'sass-loader',
           ],
-        }
+        },
+        { test: /(eot|woff|woff2|ttf|svg)(\?\S*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fontawesome-fonts.[ext]',
+              // publicPath: './../../',
+              publicPath: '../webfonts/',
+              outputPath: 'lib/webfonts/',
+              emitFile: true
+            }  
+          }
+        ]
+      },
       ]
     },
 
@@ -94,6 +127,11 @@ async function getConfig() {
         nodePath: path.join(__dirname, 'node_modules'),
         stylesPath: path.join(__dirname, 'src/_styles'),
       }
+    },
+
+    devServer: {
+      contentBase: path.join(__dirname, "dist/"),
+      port: 9000
     },
 
     plugins: [ 
@@ -113,6 +151,7 @@ async function getConfig() {
         // jQuery: 'jquery',
       }),
 
+
       /* Copy some needed files in hierarchy */
       new CopyWebpackPlugin([
         // speaker note base window
@@ -122,7 +161,7 @@ async function getConfig() {
         // modified styles for menu.js plugin (compatible with inline svg)
         // { from: (configEnv.FOR_WEB || (configEnv.FONTAWESOME_ENGINE=='css') ? '../node_modules/reveal.js-menu/menu.css' : '_styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
         // any files in content
-        { context: 'content',
+        { context: 'src/content',
           from: '**/*',
           to: 'content/'
         }
@@ -135,6 +174,8 @@ async function getConfig() {
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
+        FA_CSS: userConfig.FONT_AWESOME_BACKEND == 'css',
+        FA_SVG: userConfig.FONT_AWESOME_BACKEND == 'svg',
       }),
 
       /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
@@ -155,4 +196,8 @@ async function getConfig() {
 }
 
 
+const isEnv = (name) => process.env.NODE_ENV === name
+
+
 module.exports = getConfig();
+

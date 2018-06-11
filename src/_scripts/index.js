@@ -13,3 +13,10 @@ import './reveal-config.js';
 
 // Reveal js styles and theme
 import 'stylesPath/main.scss';
+
+
+if (FA_CSS) {
+	require('stylesPath/_font-awesome-imports.scss')
+}
+
+
