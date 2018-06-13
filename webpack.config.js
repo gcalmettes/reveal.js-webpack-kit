@@ -9,6 +9,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
 // const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
+const GoogleFontsPlugin = require('google-fonts-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
@@ -37,13 +38,13 @@ async function getConfig() {
   
   
   // const FONTS_DONWLOAD = await fs.exists('./dist/lib/css/fonts-all.css', exists => exists)
-  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/fonts-all.css') ? false : true
+  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/ttf.css') ? false : true
 
   const htmlList = await gchelpers.getEntries('./src/')
   const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, userConfig.FONTAWESOME_BACKEND=='svg')
   
-  // console.log('font download:', FONTS_DONWLOAD)
-  console.log('FontAwesome Backend:', userConfig.FONTAWESOME_BACKEND)
+  console.log('Google fonts download:', FONTS_DONWLOAD)
+  console.log('FontAwesome framework:', userConfig.FONTAWESOME_BACKEND)
 
 
   return {
@@ -174,8 +175,37 @@ async function getConfig() {
             append: true 
         }) 
         : gchelpers.DummyPlugin(),
+
+      // new GoogleFontsPlugin({
+      //     fonts: [
+      //       { family: "Source Sans Pro" },
+      //       { family: "Passion One" },
+      //     ],
+      //     path: 'lib/fonts/',
+      //     filename: 'lib/css/fonts-all.css',
+      //     local: true,
+      //     formats: [ "eot", "woff", "woff2", "ttf"]
+      //   }),
+
+      (FONTS_DONWLOAD) ?
+        new GoogleFontsPlugin({
+          "fonts": [
+            {"family": "Source Sans Pro"},
+            {"family": "Passion One"}
+          ],
+          "formats": ["ttf"],
+          "outputDir": "dist/lib/css"
+        })
+        : gchelpers.DummyPlugin(),
+
+      new HtmlWebpackIncludeAssetsPlugin({
+          assets: ['lib/css/ttf.css'],
+          append: true 
+    }),
+
+
       
-      // clean up generatedEntries folder for file-specific tree shaking of FA icons
+      // clean up generatedEntries folder of file-specific tree shaking for FA icons
       {
         apply: (compiler) => {
           compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
@@ -186,6 +216,7 @@ async function getConfig() {
           });
         }
       },
+      
       // new BundleAnalyzerPlugin()
     ]
   };
