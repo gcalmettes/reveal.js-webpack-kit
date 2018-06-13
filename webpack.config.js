@@ -8,7 +8,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
-// const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 const GoogleFontsPlugin = require('google-fonts-plugin').default
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -27,6 +26,11 @@ async function getConfig() {
     /* Languages to be supported by syntax highlighting in Reveal 
      (the more fonts, the heavier the bundle will be) */
     HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
+
+    /* Fonts and formats to be included in build. Could be several from ['ttf', 'eot', 'woff', 'woff2']*/
+    GOOGLE_FONTS: [	{"family": "Source Sans Pro"},
+            		{"family": "Passion One"}],
+    GOOGLE_FONTS_FORMATS: ['ttf'],
     
     /* FONT AWESOME. CSS or SVG backend. If CSS chosen, then either link to the CDN
     or link to local .css file (automatically downloaded)*/
@@ -36,9 +40,10 @@ async function getConfig() {
   
   }
   
-  
-  // const FONTS_DONWLOAD = await fs.exists('./dist/lib/css/fonts-all.css', exists => exists)
-  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/ttf.css') ? false : true
+ 
+  // Check if all the font formats already present in dist folder.
+  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : userConfig.GOOGLE_FONTS_FORMATS.map(format => fs.existsSync(`./dist/lib/css/${format}.css`))
+  	.reduce((acc, bool) => acc && bool, true) ? false : true
 
   const htmlList = await gchelpers.getEntries('./src/')
   const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, userConfig.FONTAWESOME_BACKEND=='svg')
@@ -176,35 +181,21 @@ async function getConfig() {
         }) 
         : gchelpers.DummyPlugin(),
 
-      // new GoogleFontsPlugin({
-      //     fonts: [
-      //       { family: "Source Sans Pro" },
-      //       { family: "Passion One" },
-      //     ],
-      //     path: 'lib/fonts/',
-      //     filename: 'lib/css/fonts-all.css',
-      //     local: true,
-      //     formats: [ "eot", "woff", "woff2", "ttf"]
-      //   }),
-
+      /* If font formats missing, then download them */
       (FONTS_DONWLOAD) ?
         new GoogleFontsPlugin({
-          "fonts": [
-            {"family": "Source Sans Pro"},
-            {"family": "Passion One"}
-          ],
-          "formats": ["ttf"],
+          "fonts": userConfig.GOOGLE_FONTS,
+          "formats": userConfig.GOOGLE_FONTS_FORMATS,
           "outputDir": "dist/lib/css"
         })
         : gchelpers.DummyPlugin(),
 
+      /* Include fonts */
       new HtmlWebpackIncludeAssetsPlugin({
-          assets: ['lib/css/ttf.css'],
+          assets: userConfig.GOOGLE_FONTS_FORMATS.map(format => `lib/css/${format}.css`),
           append: true 
-    }),
+    	}),
 
-
-      
       // clean up generatedEntries folder of file-specific tree shaking for FA icons
       {
         apply: (compiler) => {
