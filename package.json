@@ -1,5 +1,5 @@
 {
-  "name": "revealjs-webpack-sauce",
+  "name": "reveal.js-webpack-kit",
   "version": "2.0.0",
   "description": "webpack-powered reveal.js presentations",
   "main": "index.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gcalmettes/revealjs-webpack-sauce.git"
+    "url": "git+https://github.com/gcalmettes/reveal.js-webpack-kit.git"
   },
   "keywords": [
     "webpack",
@@ -24,9 +24,9 @@
   "author": "Guillaume Calmettes",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gcalmettes/revealjs-webpack-sauce/issues"
+    "url": "https://github.com/gcalmettes/reveal.js-webpack-kit/issues"
   },
-  "homepage": "https://github.com/gcalmettes/revealjs-webpack-sauce#readme",
+  "homepage": "https://github.com/gcalmettes/reveal.js-webpack-kit#readme",
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
