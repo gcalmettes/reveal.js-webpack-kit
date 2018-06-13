@@ -52,6 +52,13 @@ By choosing the `svg` framework, you'll have access to the [SVG with Javascript]
 
 Only the needed icons will be included in the bundle (tree-shaking) and a js icons file per html file will be generated.
 
+Note when Hot reloading is used:
+--------------------------------
+- HR can deal with files already present in the `dist` (built) folder. So make a build before (e.g.: `npm run dev-fa-svg`) before launching the dev-server to make sure all the files in your `src` folder have been transfered to the `build` folder.
+- If FA svg framework is used in development mode, the tree-shaked js file created for each html entry won't be updated, so you'll need to rebuild to see the icons. (this won't happen if the css framework is used as all the icons will be accessible). 
+- The same problem applies for the `external` plugin. You need to make sure the files are also in the build folder, since this is where your app will look for it, so rebuild.
+
+
 
 
 
