@@ -116,7 +116,7 @@ exports.getIconsInFile = function(file, htmlFile = true, tags = ATTRIBUTES_WATCH
        (e.g.: class="will be matched") */
     tags.forEach(attr => {
       [`'`, `"`].forEach(quote => {
-        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r]?[^=]*fa-[a-z0-9\-]+[^=]*|[^=]*fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
+        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=${quote}]*fa[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*|[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*fa[s|b|r][^=${quote}]*)${quote}`, 'g')
         let matchArray
         while (matchArray = regex.exec(data)) {
           allClasses.push(matchArray[1])
