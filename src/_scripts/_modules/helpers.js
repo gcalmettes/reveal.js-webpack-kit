@@ -43,7 +43,8 @@ const getExternalFilesInFile = function (file) {
     allExternalFiles.push(matchArray[1])
   }
 
-  return allExternalFiles
+  // return only files that exist (e.g.: presence of commented external files)
+  return allExternalFiles.filter(d => fs.existsSync(d))
 }
 
 
