@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "live": "NODE_ENV=dev-server webpack-dev-server --mode development",
-    "dev": "NODE_ENV=development webpack --mode development",
+    "live-fa-css": "NODE_ENV=dev-server FONT_AWESOME='css' webpack-dev-server --mode development",
+    "live-fa-svg": "NODE_ENV=dev-server FONT_AWESOME='svg' webpack-dev-server --mode development",
+    "dev-fa-css": "NODE_ENV=development FONT_AWESOME='css' webpack --mode development",
+    "dev-fa-svg": "NODE_ENV=development FONT_AWESOME='svg' webpack --mode development",
     "build-fa-css": "NODE_ENV=production FONT_AWESOME='css' webpack --mode production",
     "build-fa-svg": "NODE_ENV=production FONT_AWESOME='svg' webpack --mode production",
     "build-web": "NODE_ENV='production-web' webpack --mode production"
