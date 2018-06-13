@@ -7,6 +7,7 @@ const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plug
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs')
+const exec = require('child_process').exec;
 // const GoogleFontsPlugin = require('google-fonts-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -173,8 +174,18 @@ async function getConfig() {
             append: true 
         }) 
         : gchelpers.DummyPlugin(),
-
-
+      
+      // clean up generatedEntries folder for file-specific tree shaking of FA icons
+      {
+        apply: (compiler) => {
+          compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+            exec('rm -R ./src/_scripts/_generatedEntries', (err, stdout, stderr) => {
+              if (stdout) process.stdout.write(stdout);
+              if (stderr) process.stderr.write(stderr);
+            });
+          });
+        }
+      },
       // new BundleAnalyzerPlugin()
     ]
   };
