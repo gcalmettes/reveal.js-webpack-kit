@@ -44,6 +44,7 @@ Configuration
 At the top of the `webpack.config.js` file are some of the configurations that you can setup:
 
 - Programming languages supported by `highlight.js` for code presention (reveal.js `<pre><code>` tags) in the slides (to minimize the bundle size, you can only select only the languages that you are using in your presentation)
+- Font Awesome Backend (css or svg). Note that performance (slide transitions, etc ) can be reduced if svg used.
 
 
 

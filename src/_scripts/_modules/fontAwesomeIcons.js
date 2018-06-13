@@ -116,12 +116,11 @@ exports.getIconsInFile = function(file, htmlFile = true, tags = ATTRIBUTES_WATCH
        (e.g.: class="will be matched") */
     tags.forEach(attr => {
       [`'`, `"`].forEach(quote => {
-        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r][^=]*fa-[a-z0-9\-]+[^=]*|[^=]*fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
+        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r]?[^=]*fa-[a-z0-9\-]+[^=]*|[^=]*fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
         let matchArray
         while (matchArray = regex.exec(data)) {
           allClasses.push(matchArray[1])
         }
-
       })
     })
     allClasses = allClasses.map(d => d.split(' '))
@@ -153,7 +152,7 @@ exports.generateFontAwesomeImportsText = function(icons) {
   const categories = [... new Set(icons.map(d => d.iconCategory))]
   const groupedIcons = categories.map(category => {
     return {'category': category, 
-            'icons': icons.filter(icon => icon.iconCategory==category).map(ic => ic.iconFileName)}
+            'icons': [...new Set(icons.filter(icon => icon.iconCategory==category).map(ic => ic.iconFileName))]}
     })
   groupedIcons.forEach(d => {
     let categoryImport = `import {${`${[...d.icons]}`}} from 'nodePath/@fortawesome/fontawesome-free-${d.category}/shakable.es.js'`
@@ -161,7 +160,8 @@ exports.generateFontAwesomeImportsText = function(icons) {
   })
 
   iconsImportsText += `\nfontawesome.library.add(${[...icons.map(icon => icon.iconFileName)]})`
-  iconsImportsText += "\nfontawesome.config['searchPseudoElements'] = true"
+  // If true this will make everything very very slow ....
+  // iconsImportsText += "\nfontawesome.config['searchPseudoElements'] = true"
   
   return iconsImportsText
 }

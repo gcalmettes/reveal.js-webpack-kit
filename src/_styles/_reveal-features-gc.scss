@@ -267,26 +267,6 @@ section {
   & .sided-no-bg {
       border-left: $borderSidedThickness solid lighten($borderColor, 50%);
   }
-  
- //  // if Font Awesome with SVG
-	// & .quoted {
- //  		background-color: lighten($borderColor, 85%);
- //  		font-style: italic;
- //  		&:before {
- //  			display: none;
- //  			content: "\f10d";
- //  			font-family: "Font Awesome 5 Solid";
-	// 		}
-	// 		&:after {
-	// 			display: none;
- //  			position: relative;
- //  			top: 0.3em;
- //  			content: "\f10e";
- //  			font-family: 'Font Awesome 5 Solid';
- //  			padding-left: 0.2em;
-	// 		}
- //  }
-  // if font awesome with CSS
   & .quoted {
     background-color: lighten($borderColor, 80%);
     font-style: italic;
@@ -294,38 +274,25 @@ section {
       position: relative;
       top: -0.1em;
       left: -0.2em;
-      content: "\f10d";
+      display: inline-block;
+      content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="gray" d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z"/></svg>');
+      height: 1em;
+      width: 1em;
       color: lighten($borderColor, 50%);
-      font-family: "Font Awesome 5 Free";
-      font-weight: 900;
       -webkit-font-smoothing: antialiased; 
     }
     &:after {
       position: relative;
       top: 0.3em;
-      content: "\f10e";
+      display: inline-block;
+      content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="gray" d="M464 32H336c-26.5 0-48 21.5-48 48v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48zm-288 0H48C21.5 32 0 53.5 0 80v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48z"/></svg>');
+      height: 1em;
+      width: 1em;
       color: lighten($borderColor, 50%);
-      font-family: 'Font Awesome 5 Free';
       padding-left: 0.2em;
-      font-weight: 900;
       -webkit-font-smoothing: antialiased;
     }
   }
-}
-
-// hack to style Font Awesome in quoted element
-.quoted svg[data-fa-pseudo-element=':before'] {
-	position: relative;
-  top: 0.05em;
-	color: lighten($borderColor, 50%);
-	padding-right: 0.3em;
-	font-style: 4em;
-}
-.quoted svg[data-fa-pseudo-element=':after'] {
-	position: relative;
-  top: 0.15em;
-	color: lighten($borderColor, 50%);
-	padding-left: 0.2em;
 }
 
 /////////////////////

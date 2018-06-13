@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "live": "NODE_ENV=dev-server webpack-dev-server --mode development",
     "dev": "NODE_ENV=development webpack --mode development",
-    "build": "NODE_ENV=production webpack --mode production",
+    "build-fa-css": "NODE_ENV=production FONT_AWESOME='css' webpack --mode production",
+    "build-fa-svg": "NODE_ENV=production FONT_AWESOME='svg' webpack --mode production",
     "build-web": "NODE_ENV='production-web' webpack --mode production"
   },
   "repository": {

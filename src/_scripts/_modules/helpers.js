@@ -34,7 +34,7 @@ exports.getEntries = function(path) {
 
 // Get all files imported with data_external plugin
 const getExternalFilesInFile = function (file) {
-  const regex = /data-external[\s+]?=[\s+]?"(.*)"|data-external[\s+]?=[\s+]?'(.*)'/g
+  const regex = /data-external(?:-replace)?[\s+]?=[\s+]?"(.*)"|data-external(?:-replace)?[\s+]?=[\s+]?'(.*)'/g
   const data = fs.readFileSync(file, 'utf8')
   const allExternalFiles = []
   // let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=]*fa[s|b|r][^=]*fa-[a-z0-9\-]+|fa-[a-z0-9\-]+[^=]*fa[s|b|r][^=]*)${quote}`, 'g')
@@ -61,11 +61,11 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
       let externalFilesIcons = getExternalFilesInFile(__dirname + `/../../${path}`)
         .map(file => FAtools.getIconsInFile(__dirname + `/../../${file}`))
       externalFilesIcons = externalFilesIcons.length>0 ? externalFilesIcons.reduce((acc, val) => [...acc, ...val]) : []
-      
+
       const importsText = FAtools.generateFontAwesomeImportsText([...iconsInMenuPlugin, ...iconsInFile, ...externalFilesIcons])
       const faFileName = `fa-${name.replace(/\s/g, '')}`
       const jsFilePath = `./src/_scripts/_generatedEntries/${faFileName}.js`
-      writeFileSync(`./src/${jsFilePath}`, importsText)
+      writeFileSync(`./${jsFilePath}`, importsText)
 
       entries[faFileName] = jsFilePath
   
@@ -73,7 +73,7 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
         new HtmlWebpackPlugin({
           title: name,
           template: `./src/${path}`,
-          filename: `./src/${path}`,
+          filename: `./${path}`,
           chunks: [faFileName, 'app'],
           chunksSortMode:  'manual',
         })
@@ -81,12 +81,12 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
     })
 
   } else {
-    Object.entries(htmlFiles).forEach(([key, value]) => {
+    Object.entries(htmlFiles).forEach(([name, path]) => {
       htmlPluginList.push( 
         new HtmlWebpackPlugin({
-          title: key,
-          template: './src/' + value,
-          filename: './' + value,
+          title: name,
+          template: `./src/${path}`,
+          filename: `./${path}`,
           chunks: ['app'],
         })
       )

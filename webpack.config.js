@@ -25,7 +25,10 @@ async function getConfig() {
     /* Languages to be supported by syntax highlighting in Reveal 
      (the more fonts, the heavier the bundle will be) */
     HIGHLIGHT_LANGUAGES: ['xml', 'javascript', 'python', 'bash'],
-    FONTAWESOME_BACKEND: 'css', // 'css' or 'svg' ... (svg option not yet implemented)
+    
+    /* FONT AWESOME. CSS or SVG backend. If CSS chosen, then either link to the CDN
+    or link to local .css file (automatically downloaded)*/
+    FONTAWESOME_BACKEND: process.env.FONT_AWESOME, // 'css' or 'svg'
     FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.13/css/all.css",
     FONTAWESOME_USE_LOCAL: true
   
@@ -36,19 +39,10 @@ async function getConfig() {
   const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : fs.existsSync('./dist/lib/css/fonts-all.css') ? false : true
 
   const htmlList = await gchelpers.getEntries('./src/')
-  const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, !(userConfig.FONTAWESOME_BACKEND=='css'))
+  const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, userConfig.FONTAWESOME_BACKEND=='svg')
   
-  console.log(htmlPluginList)
-
-  // console.log(htmlPluginList)
-  // const env = process.env.NODE_ENV
-  // const mode = process.env.WEBPACK_MODE
-  // await delay(5000);
-  // console.log(__dirname)
-  // console.log(env, mode, devMode)
-  console.log('font download:', FONTS_DONWLOAD)
-
-
+  // console.log('font download:', FONTS_DONWLOAD)
+  console.log('FontAwesome Backend:', userConfig.FONTAWESOME_BACKEND)
 
 
   return {
@@ -128,12 +122,6 @@ async function getConfig() {
     },
 
     plugins: [ 
-      // new HtmlWebpackPlugin({
-      //   inject: true,
-      //   hash: false,
-      //   template: './src/index.html',
-      //   filename: 'index.html'
-      // }),
       ...htmlPluginList,
 
 
@@ -148,8 +136,6 @@ async function getConfig() {
         { from: 'node_modules/reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
         // styles for slides export to to pdf
         { from: { glob: 'node_modules/reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
-        // modified styles for menu.js plugin (compatible with inline svg)
-        // { from: (configEnv.FOR_WEB || (configEnv.FONTAWESOME_ENGINE=='css') ? '../node_modules/reveal.js-menu/menu.css' : '_styles/menu-inline-svg.css', to: 'lib/css/menu.css' },
         // any files in content
         { context: 'src/content',
           from: '**/*',
@@ -164,8 +150,7 @@ async function getConfig() {
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
-        FA_CSS: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL,
-        FA_SVG: userConfig.FONTAWESOME_BACKEND == 'svg' && userConfig.FONTAWESOME_USE_LOCAL,
+        FA_CSS_LOCAL: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL,
       }),
 
       /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
@@ -182,12 +167,12 @@ async function getConfig() {
       /* !!!! FONTS AWESOME !!!!
        If (FONTAWESOME_BACKEND=='css' && FONTAWESOME_USE_LOCAL==false) just link
        to the FA CDN */
-    (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL) ?
-      new HtmlWebpackIncludeAssetsPlugin({
-          assets: [userConfig.FONTAWESOME_CDN],
-          append: true 
-      }) 
-      : gchelpers.DummyPlugin(),
+      (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL) ?
+        new HtmlWebpackIncludeAssetsPlugin({
+            assets: [userConfig.FONTAWESOME_CDN],
+            append: true 
+        }) 
+        : gchelpers.DummyPlugin(),
 
 
       // new BundleAnalyzerPlugin()

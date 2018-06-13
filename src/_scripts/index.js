@@ -15,7 +15,8 @@ import './reveal-config.js';
 import 'stylesPath/main.scss';
 
 
-if (FA_CSS) {
+// if Font Awesome backend is css and local, then compile necessary .scss files
+if (FA_CSS_LOCAL) {
 	require('stylesPath/_font-awesome-imports.scss')
 }
 
