@@ -44,7 +44,7 @@ const getExternalFilesInFile = function (file) {
   }
 
   // return only files that exist (e.g.: presence of commented external files)
-  return allExternalFiles.filter(d => fs.existsSync(d))
+  return allExternalFiles.filter(d => fs.existsSync(`${__dirname}/../../${d}`))
 }
 
 
