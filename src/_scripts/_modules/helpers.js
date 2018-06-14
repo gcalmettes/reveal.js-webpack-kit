@@ -57,7 +57,7 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
     Object.entries(htmlFiles).forEach(([name, path]) => {
       
       /* Generate the necessary imports with only the FA icons used in file */
-      const iconsInMenuPlugin = FAtools.getIconsInFile(__dirname + '/../../../node_modules/reveal.js-menu/menu.js', htmlFile=false)
+      const iconsInMenuPlugin = FAtools.getIconsInFile(__dirname + '/../../../node_modules/reveal.js-menu/menu.js')
       const iconsInFile = FAtools.getIconsInFile(__dirname + `/../../${path}`)
       let externalFilesIcons = getExternalFilesInFile(__dirname + `/../../${path}`)
         .map(file => FAtools.getIconsInFile(__dirname + `/../../${file}`))

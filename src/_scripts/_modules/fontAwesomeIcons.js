@@ -107,30 +107,24 @@ const getCanonicalIcon = (values, styles = iconStyles, defaultPrefix = "fas") =>
   }, emptyCanonicalIcon());
 }
 
-exports.getIconsInFile = function(file, htmlFile = true, tags = ATTRIBUTES_WATCHED_FOR_MUTATION) {
+exports.getIconsInFile = function(file, tags = ATTRIBUTES_WATCHED_FOR_MUTATION) {
   const data = fs.readFileSync(file, 'utf8')
   let allClasses = []
 
-  if (htmlFile) {
-    /* Match anything that is between the quotes of the specified tags 
-       (e.g.: class="will be matched") */
-    tags.forEach(attr => {
-      [`'`, `"`].forEach(quote => {
-        let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=${quote}]*fa[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*|[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*fa[s|b|r][^=${quote}]*)${quote}`, 'g')
-        let matchArray
-        while (matchArray = regex.exec(data)) {
-          allClasses.push(matchArray[1])
-        }
-      })
+  /* Match anything that is between the quotes of the specified tags 
+     (e.g.: class="will be matched") */
+  tags.forEach(attr => {
+    [`'`, `"`].forEach(quote => {
+      // let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=${quote}]*fa[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*|[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*fa[s|b|r][^=${quote}]*)${quote}`, 'g')
+      let regex = new RegExp(`(?:${attr})?[\s+]?=?[\s+]?${quote}([^=${quote}]*f?a?[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*)${quote}`, 'g')
+      let matchArray
+      while (matchArray = regex.exec(data)) {
+        allClasses.push(matchArray[1])
+      }
     })
-    allClasses = allClasses.map(d => d.split(' '))
-  } else {
-    /* if not in HTML file, then try to find anything mathching fa-something */
-    const regex = /(fa\-[a-z0-9\-]+)/g;
-    data.match(regex).forEach(
-      faElement => allClasses.push([faElement])
-    )
-  }
+  })
+  allClasses = allClasses.map(d => d.split(' '))
+
   return allClasses
           .map(d => getCanonicalIcon(d))
           .filter(icon => icon.iconName)
@@ -144,10 +138,6 @@ exports.getIconsInFile = function(file, htmlFile = true, tags = ATTRIBUTES_WATCH
 
 exports.generateFontAwesomeImportsText = function(icons) {
   let iconsImportsText = "import fontawesome from 'nodePath/@fortawesome/fontawesome'"
-
-  // ensure quoteLeft and quoteRight will be imported as they are needed for "quoted" class
-  const quoteIcons = ['faQuoteLeft', 'faQuoteRight']
-  quoteIcons.forEach(d => icons.push({iconCategory: 'solid', iconFileName: d}))
   
   const categories = [... new Set(icons.map(d => d.iconCategory))]
   const groupedIcons = categories.map(category => {
@@ -155,13 +145,10 @@ exports.generateFontAwesomeImportsText = function(icons) {
             'icons': [...new Set(icons.filter(icon => icon.iconCategory==category).map(ic => ic.iconFileName))]}
     })
   groupedIcons.forEach(d => {
-    let categoryImport = `import {${`${[...d.icons]}`}} from 'nodePath/@fortawesome/fontawesome-free-${d.category}/shakable.es.js'`
+    let categoryImport = `import {${`${[...d.icons.map(i => `${i} as ${i}${d.category}`)]}`}} from 'nodePath/@fortawesome/fontawesome-free-${d.category}/shakable.es.js'`
     iconsImportsText += `\n${categoryImport}`
   })
-
-  iconsImportsText += `\nfontawesome.library.add(${[...icons.map(icon => icon.iconFileName)]})`
-  // If true this will make everything very very slow ....
-  // iconsImportsText += "\nfontawesome.config['searchPseudoElements'] = true"
+  iconsImportsText += `\nfontawesome.library.add(${[...icons.map(icon => `${icon.iconFileName}${icon.iconCategory}`)]})`
   
   return iconsImportsText
 }
