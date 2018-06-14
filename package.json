@@ -58,6 +58,6 @@
     "reveal.js": "^3.6.0",
     "reveal.js-menu": "^1.1.2",
     "reveal_external": "^1.3.0",
-    "reveald3": "^1.4.3"
+    "reveald3": "^1.4.4"
   }
 }
