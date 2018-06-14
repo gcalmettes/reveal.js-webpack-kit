@@ -154,7 +154,7 @@ async function getConfig() {
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
-        FA_CSS_LOCAL: FA_CSS_LOCAL: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL && !isEnv('production-web'),
+        FA_CSS_LOCAL: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL && !isEnv('production-web-css'),
       }),
 
       /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
