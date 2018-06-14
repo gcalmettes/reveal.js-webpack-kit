@@ -9,12 +9,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
 const GoogleFontsPlugin = require('google-fonts-plugin').default
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
-
-// const delay = (duration) =>
-//   new Promise(resolve => setTimeout(resolve, duration));
 
 
 async function getConfig() {
@@ -42,8 +39,8 @@ async function getConfig() {
   
  
   // Check if all the font formats already present in dist folder.
-  const FONTS_DONWLOAD = await isEnv('dev-server') ? false : isEnv('production-web') ? false : userConfig.GOOGLE_FONTS_FORMATS.map(format => fs.existsSync(`./dist/lib/css/${format}.css`))
-  	.reduce((acc, bool) => acc && bool, true) ? false : true
+  const FONTS_DONWLOAD = userConfig.GOOGLE_FONTS_FORMATS.map(format => fs.existsSync(`./dist/lib/css/${format}.css`))
+    .reduce((acc, bool) => acc && bool, true) ? false : true
 
   const htmlList = await gchelpers.getEntries('./src/')
   const [entries, htmlPluginList] = gchelpers.getEntriesAndHTMLPlugins(htmlList, userConfig.FONTAWESOME_BACKEND=='svg')
@@ -157,7 +154,7 @@ async function getConfig() {
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
-        FA_CSS_LOCAL: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL,
+        FA_CSS_LOCAL: FA_CSS_LOCAL: userConfig.FONTAWESOME_BACKEND == 'css' && userConfig.FONTAWESOME_USE_LOCAL && !isEnv('production-web'),
       }),
 
       /* Include only Highlights.js languages that are specified in configEnv.HIGHLIGHT_LANGUAGES */
@@ -174,7 +171,7 @@ async function getConfig() {
       /* !!!! FONTS AWESOME !!!!
        If (FONTAWESOME_BACKEND=='css' && FONTAWESOME_USE_LOCAL==false) just link
        to the FA CDN */
-      (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL) ?
+      (isEnv('production-web-css') || (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL)) ?
         new HtmlWebpackIncludeAssetsPlugin({
             assets: [userConfig.FONTAWESOME_CDN],
             append: true 
