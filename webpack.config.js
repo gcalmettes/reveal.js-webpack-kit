@@ -13,9 +13,7 @@ const GoogleFontsPlugin = require('google-fonts-plugin')
 
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
 
-
 async function getConfig() {
-
 
   // Configurable options for the build
   const userConfig = {
@@ -26,18 +24,17 @@ async function getConfig() {
 
     /* Fonts and formats to be included in build. Could be several from ['ttf', 'eot', 'woff', 'woff2']*/
     GOOGLE_FONTS: [	{"family": "Source Sans Pro"},
-            		{"family": "Passion One"}],
+            		    {"family": "Passion One"}],
     GOOGLE_FONTS_FORMATS: ['ttf'],
     
     /* FONT AWESOME. CSS or SVG backend. If CSS chosen, then either link to the CDN
     or link to local .css file (automatically downloaded)*/
     FONTAWESOME_BACKEND: process.env.FONT_AWESOME, // 'css' or 'svg'
-    FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.0.13/css/all.css",
+    FONTAWESOME_CDN: "https://use.fontawesome.com/releases/v5.2.0/css/all.css",
     FONTAWESOME_USE_LOCAL: true
   
   }
   
- 
   // Check if all the font formats already present in dist folder.
   const FONTS_DONWLOAD = userConfig.GOOGLE_FONTS_FORMATS.map(format => fs.existsSync(`./dist/lib/css/${format}.css`))
     .reduce((acc, bool) => acc && bool, true) ? false : true
@@ -50,7 +47,6 @@ async function getConfig() {
 
 
   return {
-    // entry: { main: './src/_scripts/index.js' },
     entry: entries,
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -61,6 +57,11 @@ async function getConfig() {
       minimizer: [
         new UglifyJsPlugin({
           uglifyOptions: {
+            compress: {
+              // see https://github.com/FortAwesome/Font-Awesome/issues/13260#issuecomment-398409989 
+              // and https://github.com/fabiosantoscode/terser/issues/50
+              collapse_vars: false,
+            },
             output: {
               comments: false,
               beautify: false,
@@ -78,7 +79,7 @@ async function getConfig() {
           test: /\.js$/,
           exclude: /node_modules/,
           use: {
-            loader: "babel-loader"
+            loader: 'babel-loader'
           }
         },
         {
@@ -132,7 +133,6 @@ async function getConfig() {
       new webpack.ProvidePlugin({
         Reveal: 'reveal.js',
       }),
-
 
       /* Copy some needed files in hierarchy */
       new CopyWebpackPlugin([
@@ -211,9 +211,7 @@ async function getConfig() {
 
 }
 
-
 const isEnv = (name) => process.env.NODE_ENV === name
-
 
 module.exports = getConfig();
 

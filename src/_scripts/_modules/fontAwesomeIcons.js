@@ -51,7 +51,7 @@ const getAllIconsInCategorySourceFile = (file, category) => {
 
 const getAllFontAwesomeIconNames = (categories) => {
   const allIcons = categories
-    .map(category => getAllIconsInCategorySourceFile(__dirname + `/../../../node_modules/@fortawesome/fontawesome-free-${category}/shakable.es.js`, category))
+    .map(category => getAllIconsInCategorySourceFile(__dirname + `/../../../node_modules/@fortawesome/free-${category}-svg-icons/index.js`, category))
     .reduce((a, b) => [...a, ...b])
 
   let faIconsPerCategory = {}
@@ -69,8 +69,6 @@ const getAllFontAwesomeIconNames = (categories) => {
 ///////////////////////////////
 // Scan a file
 //////////////////////////////
-
-
 
 const isReserved = (name, reservedList = RESERVED_CLASSES) => {
   return ~reservedList.indexOf(name);
@@ -115,7 +113,6 @@ exports.getIconsInFile = function(file, tags = ATTRIBUTES_WATCHED_FOR_MUTATION) 
      (e.g.: class="will be matched") */
   tags.forEach(attr => {
     [`'`, `"`].forEach(quote => {
-      // let regex = new RegExp(`${attr}[\s+]?=[\s+]?${quote}([^=${quote}]*fa[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*|[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*fa[s|b|r][^=${quote}]*)${quote}`, 'g')
       let regex = new RegExp(`(?:${attr})?[\s+]?=?[\s+]?${quote}([^=${quote}]*f?a?[s|b|r]?[^=${quote}]*fa-[a-z0-9\-]+[^=${quote}]*)${quote}`, 'g')
       let matchArray
       while (matchArray = regex.exec(data)) {
@@ -137,7 +134,7 @@ exports.getIconsInFile = function(file, tags = ATTRIBUTES_WATCHED_FOR_MUTATION) 
 */
 
 exports.generateFontAwesomeImportsText = function(icons) {
-  let iconsImportsText = "import fontawesome from 'nodePath/@fortawesome/fontawesome'"
+  let iconsImportsText = "import { library, dom } from 'nodePath/@fortawesome/fontawesome-svg-core'"
   
   const categories = [... new Set(icons.map(d => d.iconCategory))]
   const groupedIcons = categories.map(category => {
@@ -145,18 +142,11 @@ exports.generateFontAwesomeImportsText = function(icons) {
             'icons': [...new Set(icons.filter(icon => icon.iconCategory==category).map(ic => ic.iconFileName))]}
     })
   groupedIcons.forEach(d => {
-    let categoryImport = `import {${`${[...d.icons.map(i => `${i} as ${i}${d.category}`)]}`}} from 'nodePath/@fortawesome/fontawesome-free-${d.category}/shakable.es.js'`
+    let categoryImport = `import {${`${[...d.icons.map(i => `${i} as ${i}${d.category}`)]}`}} from 'nodePath/@fortawesome/free-${d.category}-svg-icons'`
     iconsImportsText += `\n${categoryImport}`
   })
-  iconsImportsText += `\nfontawesome.library.add(${[...icons.map(icon => `${icon.iconFileName}${icon.iconCategory}`)]})`
+  iconsImportsText += `\nlibrary.add(${[...icons.map(icon => `${icon.iconFileName}${icon.iconCategory}`)]})`
+  iconsImportsText += '\ndom.watch()'
   
   return iconsImportsText
 }
-
-
-// const compose = (...fns) => value =>
-//     fns.reduceRight((acc, fn) => fn(acc), value)
-
-
-
-// exports.getFontAwesomeImportsFromFile = compose(generateFontAwesomeImportsText, getIconsInFile)
