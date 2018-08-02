@@ -8,7 +8,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
-const GoogleFontsPlugin = require('google-fonts-plugin').default
+const GoogleFontsPlugin = require('google-fonts-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
