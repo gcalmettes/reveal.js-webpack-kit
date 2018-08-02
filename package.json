@@ -1,6 +1,6 @@
 {
   "name": "reveal.js-webpack-kit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "webpack-powered reveal.js presentations",
   "main": "index.js",
   "scripts": {
