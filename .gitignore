@@ -33,7 +33,6 @@ bower_components
 build/Release
 build/
 src/_scripts/_generatedEntries
-package-lock.json
 dist/
 
 # Dependency directories
@@ -63,6 +62,6 @@ typings/
 # dotenv environment variables file
 .env
 
+# Mac OS files
 .DS_Store
 src/_scripts/.DS_Store
-
