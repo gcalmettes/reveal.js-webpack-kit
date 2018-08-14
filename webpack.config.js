@@ -171,21 +171,19 @@ async function getConfig() {
       /* !!!! FONTS AWESOME !!!!
        If (FONTAWESOME_BACKEND=='css' && FONTAWESOME_USE_LOCAL==false) just link
        to the FA CDN */
-      (isEnv('production-web-css') || (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL)) ?
-        new HtmlWebpackIncludeAssetsPlugin({
+      (isEnv('production-web-css') || (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL))
+        && new HtmlWebpackIncludeAssetsPlugin({
             assets: [userConfig.FONTAWESOME_CDN],
             append: true 
-        }) 
-        : gchelpers.DummyPlugin(),
+        }),
 
       /* If font formats missing, then download them */
-      (FONTS_DONWLOAD) ?
-        new GoogleFontsPlugin({
+      (FONTS_DONWLOAD) 
+        && new GoogleFontsPlugin({
           "fonts": userConfig.GOOGLE_FONTS,
           "formats": userConfig.GOOGLE_FONTS_FORMATS,
           "outputDir": "dist/lib/css"
-        })
-        : gchelpers.DummyPlugin(),
+        }),
 
       /* Include fonts */
       new HtmlWebpackIncludeAssetsPlugin({
@@ -204,9 +202,7 @@ async function getConfig() {
           });
         }
       },
-      
-      // new BundleAnalyzerPlugin()
-    ]
+    ].filter((plugin) => plugin !== false) // filter out skipped conditions
   };
 
 }

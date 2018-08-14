@@ -98,13 +98,5 @@ exports.getEntriesAndHTMLPlugins = function (htmlFiles, includeFAicons = false) 
 }
 
 
-// Return a new instance of a Dummy plugin to use in conditional plugin syntax
-exports.DummyPlugin = function () {
-  function doNothing(options){/*do nothing */}
-  doNothing.prototype.apply = () => {/*do nothing */}
-  return new doNothing
-}
-
-
 
 
