@@ -35,7 +35,7 @@ $ npm install
 $ # Do an initial build with the Font Awesome framework of your choice
 $ npm run dev-fa-svg
 $ # Launch the dev server with hot module replacement
-$ npm live-fa-svg
+$ npm run live-fa-svg
 ```
 
 Look at what the output tells you: There will a server be running (usually on http://localhost:9000) with your presentation. Any changes to the source files will trigger a reload of the presentation (you’ll stay on the current slide of course).
@@ -73,10 +73,10 @@ $ # Production build, font awesome svg framework
 $ npm run build-fa-svg
 
 $ # Launch the dev-server with hot module replacement with font awesome css framework
-$ npm live-fa-css
+$ npm run live-fa-css
 
 $ # Launch the dev-server with hot module replacement with font awesome svg framework
-$ npm live-fa-svg
+$ npm run live-fa-svg
 ```
 
 Note when Hot Module Replacement is used (dev-server):
