@@ -192,13 +192,16 @@ async function getConfig() {
     	}),
 
       // clean up generatedEntries folder of file-specific tree shaking for FA icons
+      // only when not in dev-server
       {
         apply: (compiler) => {
           compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-            exec('rm -R ./src/_scripts/_generatedEntries', (err, stdout, stderr) => {
-              if (stdout) process.stdout.write(stdout);
-              if (stderr) process.stderr.write(stderr);
-            });
+            if (process.env.NODE_ENV != 'dev-server') {
+              exec('rm -R ./src/_scripts/_generatedEntries', (err, stdout, stderr) => {
+                if (stdout) process.stdout.write(stdout);
+                if (stderr) process.stderr.write(stderr);
+              });
+            }
           });
         }
       },
