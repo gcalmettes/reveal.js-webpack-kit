@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
 const GoogleFontsPlugin = require('google-fonts-plugin')
@@ -55,17 +55,14 @@ async function getConfig() {
 
     optimization: {
       minimizer: [
-        new UglifyJsPlugin({
-          uglifyOptions: {
+        new TerserPlugin({
+          terserOptions: {
             compress: {
-              // see https://github.com/FortAwesome/Font-Awesome/issues/13260#issuecomment-398409989 
-              // and https://github.com/fabiosantoscode/terser/issues/50
-              collapse_vars: false,
+              // // see https://github.com/FortAwesome/Font-Awesome/
+              // // and https://github.com/fabiosantoscode/terser/issues/50
+              // collapse_vars: true,
             },
-            output: {
-              comments: false,
-              beautify: false,
-            }
+            output: null,
           },
           sourceMap: false
         }),
