@@ -34,9 +34,8 @@ const fs = require('fs')
 // Scan the FAmsource code for icons list
 //////////////////////////////////
 
-const getIconsInfoForCategory = (sourceFile, category, regex = /var (fa[a-zA-Z0-9\-]+) = { prefix: '[a-z]+', iconName: '([a-zA-Z0-9\-]+)',/g) => {
+const getIconsInfoForCategory = (sourceFile, category, regex = /var[\s]+(fa[a-zA-Z0-9\-]+)[\s]+=[\s]+{[\s]+prefix:[\s]+'[a-z]+',[\s]+iconName:[\s]+'([a-zA-Z0-9\-]+)',/g) => {
   let categoryIcons = []
-
   let matchArray;
   while (matchArray = regex.exec(sourceFile)) {
     categoryIcons.push({iconName: matchArray[2], iconFileName: matchArray[1], iconCategory: category})
@@ -87,7 +86,7 @@ const emptyCanonicalIcon = () => {
 
 const getCanonicalIcon = (values, styles = iconStyles, defaultPrefix = "fas") => {
   const allFAicons = getAllFontAwesomeIconNames(Object.values(iconStyles))
-  return values.reduce((acc, cls) => {
+  return values.reduce((acc, cls, i) => {
     const iconName = getIconName(cls, 'fa');
 
     if (styles[cls]) {
