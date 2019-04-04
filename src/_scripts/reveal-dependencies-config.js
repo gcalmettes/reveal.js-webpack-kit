@@ -5,7 +5,7 @@
 Reveal.configure(
 	{
     external: {
-      async: false // synchorneous loading of httprequest deprecated
+      async: false // synchroneous loading of httprequest deprecated
     },
 
   reveald3: {
