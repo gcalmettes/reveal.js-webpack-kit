@@ -663,3 +663,36 @@ section .fragment.fragapply:not(.visible) {
   } 
 }
 
+/*********************************************
+* FRAGMENT REPLACEMENT
+*********************************************/
+
+
+.reveal .slides section .fragment {
+  &.replace-out {
+    opacity: 1;
+    visibility: inherit;
+    &.visible {
+      opacity: 0;
+      display: none; 
+    }
+  }
+
+  &.replace-in {
+    opacity: 0;
+    display: none;
+    &.visible {
+      opacity: 1;
+      display: inline; 
+    }
+  }
+
+  &.replace-in-out {
+    opacity: 0;
+    display: none;
+    &.current-fragment {
+      opacity: 1;
+      display: inline; 
+    }
+  }
+}
