@@ -87,9 +87,32 @@
       <li><span class="tt danger">\fragapply{class optionalIndex}{element}</span> to change the style of the element with optional <span class="tt">data-fragment-index = optionalIndex</span></li>
     </ul>
   </div>
-  <div class="down-5 center">
-    $s= \frac{\texclass{info}{\alpha_0}}{4}  + \sqrt{\fragapply{danger 0}{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
+  <!-- <div class="down-5 center">
+    $s= \frac{\texclass{info}{\alpha_0}}{4} + \sqrt{\fragapply{danger 0}{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
      \int_{a}^{b} \fragapply{smaller 1}{x^2} \fragment{0}{dx}$
+  </div> -->
+</section>
+
+<section>
+  <h2>MATHJAX V3   </h2>
+
+  <div>
+
+$$3 + \mgc{45}$$
+$$\texclass{info}{\alpha_0}$$
+
+  </div>
+  <!-- <div>
+    $s= \frac{\texclass{info}{\alpha_0}}{4}  + \texfragapply{danger}{67}$
+    $ \sqrt{\texfragapply{danger 0}{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
+     \int_{a}^{b} \texfragapply{smaller 1}{x^2} \texfragment{0}{dx}$
+
+  </div> -->
+  <div>
+    $s= \frac{\texclass[class=info]{\alpha_0}}{4}  + \texapply[class=danger, index=1]{67}$
+    $ \sqrt{\texapply[class=danger, index=0]{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
+     \int_{a}^{b} \texapply[class=smaller, index= 1]{x^2} \texfragment[index=0]{dx}$
+
   </div>
 </section>
 <!-- <section>
