@@ -3,12 +3,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const fs = require('fs')
 const exec = require('child_process').exec;
 const GoogleFontsPlugin = require('google-fonts-plugin')
+const MathJax = require('mathjax-full/components/webpack.common.js');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const gchelpers =  require('./src/_scripts/_modules/helpers.js')
@@ -137,6 +138,10 @@ async function getConfig() {
         { from: 'node_modules/reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
         // styles for slides export to to pdf
         { from: { glob: 'node_modules/reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
+        // Mathjax fonts
+        { from: 'node_modules/mathjax-full/es5/output', to: 'lib/mathjax' },
+        // Mathjax tex component
+        { from: 'src/_scripts/reveal-plugins/tex-components/*.min.js', to: 'lib/mathjax/tex-components/[name].js' },
         // any files in content
         { context: 'src/content',
           from: '**/*',
@@ -169,7 +174,7 @@ async function getConfig() {
        If (FONTAWESOME_BACKEND=='css' && FONTAWESOME_USE_LOCAL==false) just link
        to the FA CDN */
       (isEnv('production-web-css') || (userConfig.FONTAWESOME_BACKEND=='css' && !userConfig.FONTAWESOME_USE_LOCAL))
-        && new HtmlWebpackIncludeAssetsPlugin({
+        && new HtmlWebpackTagsPlugin({
             assets: [userConfig.FONTAWESOME_CDN],
             append: true 
         }),
@@ -183,7 +188,7 @@ async function getConfig() {
         }),
 
       /* Include fonts */
-      new HtmlWebpackIncludeAssetsPlugin({
+      new HtmlWebpackTagsPlugin({
           assets: userConfig.GOOGLE_FONTS_FORMATS.map(format => `lib/css/${format}.css`),
           append: true 
     	}),
@@ -210,4 +215,3 @@ async function getConfig() {
 const isEnv = (name) => process.env.NODE_ENV === name
 
 module.exports = getConfig();
-
