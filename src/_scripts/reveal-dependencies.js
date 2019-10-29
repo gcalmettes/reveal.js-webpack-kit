@@ -1,7 +1,3 @@
-// Needed for Reveal
-import 'reveal.js/lib/js/head.min'
-// Cross-browser shim that fully implements classList
-import 'nodePath/reveal.js/lib/js/classList.js'
 // Embed any js visualization (D3, Vega, Vega-lite, Semiotic, etc ...)
 import 'nodePath/reveald3/reveald3.js'
 // Load external files
