@@ -82,16 +82,17 @@
   </div>
   <div class="down-3">
     <ul>
-      <li><span class="tt danger">\texclass{any_class}{element}</span> to style an element with any_class</li>
-      <li><span class="tt danger">\fragment{index}{element}</span> to make the element an appearing fragment with <span class="tt">data-fragment-index=index</span></li>
-      <li><span class="tt danger">\fragapply{class optionalIndex}{element}</span> to change the style of the element with optional <span class="tt">data-fragment-index = optionalIndex</span></li>
+      <li><span class="tt danger">\texclass[class=any_class]{element}</span> to style an element with any_class</li>
+      <li><span class="tt danger">\texfragment[index=any_index]{element}</span> to make the element an appearing fragment with <span class="tt">data-fragment-index=any_index</span></li>
+      <li><span class="tt danger">\fragapply[class=any_class, index=optional_index]{element}</span> to change the style of the element with optional <span class="tt">data-fragment-index = optional_index</span></li>
     </ul>
   </div>
   <div class="down-5 center">
-    $s= \frac{\texclass{info}{\alpha_0}}{4}  + \sqrt{\fragapply{danger 0}{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
-     \int_{a}^{b} \fragapply{smaller 1}{x^2} \fragment{0}{dx}$
+    $\texapply[class=success, index=2]{s}= \frac{\texclass[class=info]{\alpha_0}}{\texapply[class=success, index=2]{4}} + \sqrt{\texapply[class=bg-danger, index=1]{\frac{\sum(x_{i}-\bar{x})^2}{n-1}}} - 
+     \int_{a}^{b} \texapply[class=bg-warning, index=1]{x^2} \texfragment[index=0]{dx}$
   </div>
 </section>
+
 <!-- <section>
   <h2 data-animate="bounce slower">Animations are supported too!</h2>
   <div class="normal">
