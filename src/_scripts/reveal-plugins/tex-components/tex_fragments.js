@@ -102,40 +102,40 @@ const TexFragmentsMethods = {
      * @param {string} type        The MathML element type to be created
      */
     tex_fragments(parser, name, type) {
-        // console.log('parser:', parser)
-        console.log('name:', name)
-        console.log('type:', type)
+        console.log('parser:', parser)
+        // console.log(parser.Parse())
+        // console.log('name:', name)
+        // console.log('type:', type)
 
-        
+
+        // console.log(parser.configuration.nodeFactory)
         const def = parseAttributes(parser.GetBrackets(name))
-        console.log('def:', def)
+        let defToAdd = {}
 
-        if (name === '\\texclass') {
-          const classToAdd = parser.GetArgument(name)
-          console.log("TEXCLASS:", classToAdd);
+        if (type == 'texclass') {
+          defToAdd['class'] = def['class']
         }
 
-        if (name === '\\texfragment') {
-          const index = parser.GetArgument(name)
-          console.log("FRAGMENT:", index);
+        if (type == 'texfragment') {
+          // console.log(def)
+          defToAdd['class'] = 'fragment' //, 'fragment-mjx')
+          defToAdd['data-fragment-index'] = def['index']
+          // console.log(defToAdd)
         }
 
-        if (name === '\\texfragapply') {
-          const arg = parser.GetArgument(name)
-          console.log("FRAGAPPLY:", arg);
+        if (type == 'texapply') {
+          // console.log(def)
+          defToAdd['class'] = def['class']
+          // defToAdd['class'] = 'fragment' //, 'fragment-mjx')
+          // defToAdd['data-fragment-index'] = def['index']
+          // console.log(defToAdd)
         }
-        
 
-        // const typeClass = parser.configuration.nodeFactory.mmlFactory.getNodeClass(type);
-        // console.log(typeClass)
-        // const def = parseAttributes(parser.GetBrackets(name), typeClass);
-        // const text = convertEscapes(parser.GetArgument(name));
-        // const mml = parser.create('node', type, [parser.create('text', text)], def);
+        const math = parser.ParseArg(name)
+        const node = parser.create('node', 'mrow', [math], defToAdd)
 
-        // // console.log(typeClass, def, text, mml)
-
-        // if (type === 'texclass') mml.setTeXclass = 'test';
-        // parser.Push(mml);
+        parser.Push(node)
+  
     }
 
 };
