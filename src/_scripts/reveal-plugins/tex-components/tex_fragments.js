@@ -43,38 +43,6 @@ function convertEscapes(text) {
     return text.replace(/\\u([0-9A-F]{4})/gi, (match, hex) => String.fromCharCode(parseInt(hex,16)));
 }
 
-/**
- * Allowed attributes on any token element other than the ones with default values
- */
-const ALLOWED = {
-    style: true,
-    href: true,
-    id: true,
-    class: true
-};
-
-/**
- * Parse a string as a set of attribute="value" pairs.
- */
-// function parseAttributes(text, type) {
-//     const attr = {};
-//     if (text) {
-//         let match;
-//         while ((match = text.match(/^\s*((?:data-)?[a-z][-a-z]*)\s*=\s*(?:"([^"]*)"|(.*?))(?:\s+|,\s*|$)/i))) {
-//             const name = match[1], value = match[2] || match[3]
-//             if (type.defaults.hasOwnProperty(name) || ALLOWED.hasOwnProperty(name) || name.substr(0,5) === 'data-') {
-//                 attr[name] = convertEscapes(value);
-//             } else {
-//                 throw new TexError('BadAttribute', 'Unknown attribute "%1"', name);
-//             }
-//             text = text.substr(match[0].length);
-//         }
-//         if (text.length) {
-//             throw new TexError('BadAttributeList', 'Can\'t parse as attributes: %1', text);
-//         }
-//     }
-//     return attr;
-// }
 function parseAttributes(text) {
     const attr = {};
     if (text) {
@@ -102,38 +70,35 @@ const TexFragmentsMethods = {
      * @param {string} type        The MathML element type to be created
      */
     tex_fragments(parser, name, type) {
-        console.log('parser:', parser)
-        // console.log(parser.Parse())
-        // console.log('name:', name)
-        // console.log('type:', type)
+      
+        let def = parseAttributes(parser.GetBrackets(name))
 
-
-        // console.log(parser.configuration.nodeFactory)
-        const def = parseAttributes(parser.GetBrackets(name))
-        let defToAdd = {}
-
-        if (type == 'texclass') {
-          defToAdd['class'] = def['class']
-        }
+        /**
+        *  if (type == 'texclass') {
+        *    do nothing, def is already good
+        *  }
+        */
 
         if (type == 'texfragment') {
-          // console.log(def)
-          defToAdd['class'] = 'fragment' //, 'fragment-mjx')
-          defToAdd['data-fragment-index'] = def['index']
-          // console.log(defToAdd)
+            def = {
+              // class: 'fragment', 
+              // class: ['fragment', 'fragment-mjx'],
+              class: 'fragment fragment-mjx',
+              'data-fragment-index': def.index
+            }
         }
 
         if (type == 'texapply') {
-          // console.log(def)
-          defToAdd['class'] = def['class']
-          // defToAdd['class'] = 'fragment' //, 'fragment-mjx')
-          // defToAdd['data-fragment-index'] = def['index']
-          // console.log(defToAdd)
+            def = {
+              // class: def.class, 
+              // class:['fragapply', 'fragment', 'fragment-mjx', def.class],
+              class: `fragapply fragment fragment-mjx ${def.class}`,
+              'data-fragment-index': def.index
+            }
         }
 
         const math = parser.ParseArg(name)
-        const node = parser.create('node', 'mrow', [math], defToAdd)
-
+        const node = parser.create('node', 'mrow', [math], def)
         parser.Push(node)
   
     }
