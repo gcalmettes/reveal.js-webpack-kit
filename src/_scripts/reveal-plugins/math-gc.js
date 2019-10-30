@@ -38,5 +38,6 @@ MathJax = {
 
 
 // require('mathjax-full/es5/tex-mml-chtml.js')
-require('mathjax-full/es5/tex-chtml-full.js')
+// require('mathjax-full/es5/tex-chtml-full.js') // when Mathjax will be updated
+require('./tex-chtml-full.js')
 
