@@ -81,20 +81,23 @@ const TexFragmentsMethods = {
 
         if (type == 'texfragment') {
             def = {
-              // class: 'fragment', 
-              // class: ['fragment', 'fragment-mjx'],
               class: 'fragment fragment-mjx',
               'data-fragment-index': def.index
             }
         }
 
         if (type == 'texapply') {
-            def = {
-              // class: def.class, 
-              // class:['fragapply', 'fragment', 'fragment-mjx', def.class],
-              class: `fragapply fragment fragment-mjx ${def.class}`,
-              'data-fragment-index': def.index
+            if (def.index) {
+                def = {
+                    class: `fragapply fragment fragment-mjx ${def.class}`,
+                    'data-fragment-index': def.index
+                }
+            } else {
+                def = {
+                    class: `fragapply fragment fragment-mjx ${def.class}`
+                }
             }
+            
         }
 
         const math = parser.ParseArg(name)
