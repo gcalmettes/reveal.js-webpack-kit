@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "make-test": "cd custom-tex-extension && ../node_modules/mathjax-full/components/bin/pack",
-    "make-custom-tex-extension": "cd src/_scripts/reveal-plugins/tex-components && ../../../../node_modules/mathjax-full/components/bin/pack && mv tex_fragments.min.js ../../../../dist/lib/mathjax/tex-components/tex_fragments.min.js",
+    "make-custom-tex-extension": "cd src/_scripts/reveal-plugins/tex-components && ../../../../node_modules/mathjax-full/components/bin/pack && mkdir -p ../../../../dist/lib/mathjax/tex-components && cp tex_fragments.min.js ../../../../dist/lib/mathjax/tex-components/tex_fragments.min.js",
     "live-fa-css": "NODE_ENV=dev-server FONT_AWESOME='css' webpack-dev-server --mode development",
     "live-fa-svg": "NODE_ENV=dev-server FONT_AWESOME='svg' webpack-dev-server --mode development",
     "dev-fa-css": "NODE_ENV=development FONT_AWESOME='css' webpack --mode development",
