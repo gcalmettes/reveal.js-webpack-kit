@@ -518,10 +518,10 @@ ol{
 // fragapply latex fragment, when not visible default parameters
 section .fragment.fragapply:not(.visible) {
   opacity: 1;
-  visibility: inherit;
-  color: inherit;
-  background-color: inherit;
-  font-size: inherit !important;
+  visibility: inherit !important;
+  color: inherit !important;
+  background-color: inherit !important;
+  // font-size: inherit !important; // only if change of fontsize have to be applied
 }
 
 // .reveal .slides section .fragment.fragapply.visible {
