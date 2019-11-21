@@ -29,10 +29,10 @@
   },
   "homepage": "https://github.com/gcalmettes/reveal.js-webpack-kit#readme",
   "devDependencies": {
-    "@babel/core": "^7.6.4",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
     "babel-loader": "^8.0.6",
-    "copy-webpack-plugin": "^5.0.4",
+    "copy-webpack-plugin": "^5.0.5",
     "css-loader": "^3.2.0",
     "file-loader": "^4.2.0",
     "google-fonts-plugin": "^5.0.2",
@@ -47,7 +47,7 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.27.1",
     "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-cli": "^3.1.2",
+    "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
@@ -56,7 +56,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.6.1",
     "@fortawesome/free-regular-svg-icons": "^5.6.1",
     "@fortawesome/free-solid-svg-icons": "^5.6.1",
-    "highlight.js": "^9.13.1",
+    "highlight.js": "^9.16.2",
     "mathjax-full": "^3.0.0",
     "reveal.js": "^3.7.0",
     "reveal.js-menu": "^1.2.0",
