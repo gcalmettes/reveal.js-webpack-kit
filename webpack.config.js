@@ -184,12 +184,12 @@ async function getConfig() {
         && new GoogleFontsPlugin({
           "fonts": userConfig.GOOGLE_FONTS,
           "formats": userConfig.GOOGLE_FONTS_FORMATS,
-          "outputDir": "dist/lib/css"
+          "filename": `lib/css/[name].css`,
         }),
-
+      
       /* Include fonts */
       new HtmlWebpackTagsPlugin({
-          assets: userConfig.GOOGLE_FONTS_FORMATS.map(format => `lib/css/${format}.css`),
+          tags: userConfig.GOOGLE_FONTS_FORMATS.map(format => `lib/css/${format}.css`),
           append: true 
     	}),
 
