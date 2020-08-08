@@ -22,7 +22,7 @@ Motivation?
 
 I needed a robust system to build several presentations sharing a common library of slides (to develop a class) without the hassle of copy-pasting. I wanted a system that was easily upgradable to the latest versions of the dependencies.
 
-This way, everything stays separated, content (slides), tools (libraries) and configurations files (for the different tools). Just bump the version of any dependencies by doing `npm update` and rebuild your presentation(s). Done.
+This way, everything stays separated, content (slides), tools (libraries) and configurations files (for the different tools). Just bump the version of any dependencies by doing `yarn upgrade` and rebuild your presentation(s). Done.
 
 How?
 ----
@@ -31,11 +31,11 @@ Download this repository, go in it and then:
 
 ```console
 $ # Install dependencies
-$ npm install
+$ yarn install
 $ # Do an initial build with the Font Awesome framework of your choice
-$ npm run dev-fa-svg
+$ yarn dev-fa-svg
 $ # Launch the dev server with hot module replacement
-$ npm run live-fa-svg
+$ yarn live-fa-svg
 ```
 
 Look at what the output tells you: There will a server be running (usually on http://localhost:9000) with your presentation. Any changes to the source files will trigger a reload of the presentation (you’ll stay on the current slide of course).
@@ -52,7 +52,7 @@ The project has been build to work with the [Font Awesome 5](https://fontawesome
 - the well established [Webfonts with CSS](https://fontawesome.com/how-to-use/web-fonts-with-css) framework.
 
 Note that when the SVG framework is selected, every html files will be scanned and only the icons used will be included in the final bundle (tree-shaking).
-The `svg` and `css` frameworks can be called directly using the npm run-script command (see below).
+The `svg` and `css` frameworks can be called directly using the yarn run-script command (see below).
  
 # Dev-server, development-build and production-build
 
@@ -61,26 +61,26 @@ Unminified files will be generated for the developent builds. Minification of th
 ```console
 
 $ # Development build, font awesome css framework
-$ npm run dev-fa-css
+$ yarn dev-fa-css
 
 $ # Development build, font awesome svg framework
-$ npm run dev-fa-svg
+$ yarn dev-fa-svg
 
 $ # Production build, font awesome css framework
-$ npm run build-fa-css
+$ yarn build-fa-css
 
 $ # Production build, font awesome svg framework
-$ npm run build-fa-svg
+$ yarn build-fa-svg
 
 $ # Launch the dev-server with hot module replacement with font awesome css framework
-$ npm run live-fa-css
+$ yarn live-fa-css
 
 $ # Launch the dev-server with hot module replacement with font awesome svg framework
-$ npm run live-fa-svg
+$ yarn live-fa-svg
 ```
 
 Note when Hot Module Replacement is used (dev-server):
-- HMR can deal with files already present in the `dist` (built) folder. So make a build (e.g.: `npm run dev-fa-svg`) before launching the dev-server to make sure all the files in your `src` folder have been transfered to the `build` folder.
+- HMR can deal with files already present in the `dist` (built) folder. So make a build (e.g.: `yarn dev-fa-svg`) before launching the dev-server to make sure all the files in your `src` folder have been transfered to the `build` folder.
 - If FA svg framework is used in development mode, the tree-shaked js file created for each html entry won't be updated, so you'll need to rebuild to see the icons. (this won't happen if the css framework is used since all the icons will be accessible via the webfonts). 
 - The same applies if you're using the `reveal-external` plugin (the dev-server search the file in the `dist` folder, not the `src`). You need to make sure the files are also in the build folder, since this is where your app will look for it, so rebuild.
 
