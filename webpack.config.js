@@ -133,26 +133,30 @@ async function getConfig() {
       }),
 
       /* Copy some needed files in hierarchy */
-      new CopyWebpackPlugin([
-        // speaker note base window
-        { from: 'node_modules/reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
-        // styles for slides export to to pdf
-        { from: { glob: 'node_modules/reveal.js/css/print/*.css' }, to: 'lib/css/[name].css' },
-        // Mathjax fonts
-        { from: 'node_modules/mathjax-full/es5/output', to: 'lib/mathjax' },
-        // Mathjax tex component
-        { from: 'src/_scripts/reveal-plugins/tex-components/*.min.js', to: 'lib/mathjax/tex-components/[name].js' },
-        // any files in content
-        { context: 'src/content',
-          from: '**/*',
-          to: 'content/'
-        }
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          // speaker note base window
+          { from: 'node_modules/reveal.js/plugin/notes/notes.html', to: 'lib/js/reveal.js-dependencies/notes.html' },
+          // styles for slides export to to pdf
+          { from: 'node_modules/reveal.js/css/print/*.css', to: 'lib/css/[name].css' },
+          // Mathjax fonts
+          { from: 'node_modules/mathjax-full/es5/output', to: 'lib/mathjax' },
+          // Mathjax tex component
+          { from: 'src/_scripts/reveal-plugins/tex-components/*.min.js', to: 'lib/mathjax/tex-components/[name].js' },
+          // any files in content
+          { context: 'src/content',
+            from: '**/*',
+            to: 'content/'
+          }
+        ]
+      }),
 
-      new CopyWebpackPlugin([
-        // Style from reveal.js-menu, css (not compatible with svg inline)
-        { from: 'node_modules/reveal.js-menu/menu.css', to: 'lib/css/menu.css' },
-      ]),
+      new CopyWebpackPlugin({
+        patterns: [
+          // Style from reveal.js-menu, css (not compatible with svg inline)
+          { from: 'node_modules/reveal.js-menu/menu.css', to: 'lib/css/menu.css' },
+        ]
+      }),
 
       new webpack.DefinePlugin({
         HIGHLIGHT_LANGUAGES: JSON.stringify(Object.assign({}, userConfig.HIGHLIGHT_LANGUAGES)),
